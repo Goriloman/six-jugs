@@ -1,4 +1,4 @@
-//====================================================================================================
+//=============================== Header ===============================
 .header {
   background: #d9d9d9;
   &__container {
@@ -18,9 +18,17 @@
     color: #000;
   }
 
+  &__action {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+  }
+
   &__menu {
   }
 }
+
+//=============================== Menu ===============================
 .menu {
   &__icon {
   }
@@ -35,14 +43,18 @@
   &__item {
   }
 }
-.icon-menu {
-}
 .menu-open {
   .setting {
     right: 0;
   }
 }
-.setting {
+.money-open {
+  .money-entry {
+    right: 0;
+  }
+}
+.setting,
+.money-entry {
   position: absolute;
   height: 100vh;
   overflow: auto;
@@ -55,6 +67,42 @@
   width: 100%;
   padding: rem(10) rem(20) rem(40);
   z-index: 4;
+
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(0 0% 50%);
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: rem(10);
+
+    button {
+      width: rem(30);
+      height: rem(18);
+      position: relative;
+      &::before,
+      &::after {
+        content: "";
+        transition: all 0.3s ease 0s;
+        right: 0;
+        position: absolute;
+        width: 100%;
+        height: rem(2);
+        background-color: #000;
+      }
+      &::before {
+        top: calc(50% - rem(1));
+        transform: rotate(-45deg);
+      }
+      &::after {
+        bottom: calc(50% - rem(1));
+        transform: rotate(45deg);
+      }
+    }
+  }
+
   &__title {
     font-weight: 400;
     @include adaptiveValue("font-size", 30, 20);
@@ -82,7 +130,11 @@
     gap: rem(10);
   }
 }
-.item-setting {
+.money-entry {
+  z-index: 6;
+}
+.item-setting,
+.item-money-entry {
   &__title {
     font-family: var(--font-family);
     font-weight: 400;
@@ -123,6 +175,13 @@
     }
   }
 
+  & .select,
+  &__input {
+    margin-top: rem(10);
+  }
+  &__button {
+    margin-top: rem(15);
+  }
   &__value {
     margin-top: rem(12);
     font-size: rem(13);
@@ -131,25 +190,10 @@
     }
   }
 }
-.item-setting-1 {
-}
-.item-setting-2 {
-}
-.item-setting-3 {
-}
-.item-setting-4 {
-}
-.item-setting-5 {
-}
-.item-setting-6 {
-}
-.button {
-}
 
 //====================================================================================================
 
 //Burger
-
 .icon-menu {
   display: block;
   position: relative;
@@ -192,5 +236,12 @@
       bottom: calc(50% - rem(1));
       transform: rotate(45deg);
     }
+  }
+}
+
+.icon-money {
+  svg {
+    width: 100%;
+    max-width: rem(34.7);
   }
 }
