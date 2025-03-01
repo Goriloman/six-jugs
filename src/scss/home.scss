@@ -87,10 +87,10 @@
   }
 
   &.good {
-    animation: animation-good 8s ease;
+    animation: animation-good 3s cubic-bezier(0, 0, 0, 0.98);
   }
   &.error {
-    animation: animation-error 8s ease;
+    animation: animation-error 3s cubic-bezier(0, 0, 0, 0.98);
   }
   @keyframes animation-good {
     0% {
@@ -108,6 +108,14 @@
       background-color: #000;
     }
   }
+}
+.button-reset-money {
+  display: flex;
+  align-items: center;
+  gap: rem(10);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 //====================================================================================================
