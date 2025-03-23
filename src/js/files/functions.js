@@ -509,6 +509,14 @@ export function menuInit() {
       }
     });
   }
+  if (document.querySelector(".icon-history")) {
+    document.addEventListener("click", function (e) {
+      if (bodyLockStatus && e.target.closest(".icon-history")) {
+        bodyLockToggle();
+        document.documentElement.classList.toggle("history-open");
+      }
+    });
+  }
 }
 export function menuOpen() {
   bodyLock();

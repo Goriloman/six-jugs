@@ -207,9 +207,13 @@ let jugs = {
     title: "Подарки",
   },
 };
+let history = {};
 
 if (getCookie("jugs")) {
   jugs = getCookie("jugs", true);
+}
+if (getCookie("history")) {
+  history = getCookie("history", true);
 }
 
 // Отображение данных на экране
@@ -243,13 +247,17 @@ function displayData() {
     }
   }
 
+  // Отображение настроек
   rangeInit();
+  historyInit();
   setCookie("jugs", jugs);
+  setCookie("history", history);
 }
 displayData();
 
 // Отображение настроек
 function rangeInit() {
+  const settingCounter = document.querySelector(".setting__counter span");
   const settingList = document.querySelector(".setting__list");
   settingList.innerHTML = ""; // Очищаем предыдущий контент
 
@@ -309,6 +317,19 @@ function rangeInit() {
       });
     }
   }
+
+  let itemSettingSliders = document.querySelectorAll(".item-setting__slider");
+  itemSettingSliders.forEach((slider) => {
+    slider.noUiSlider.on("update", updateSum);
+  });
+
+  function updateSum() {
+    let totalSum = Array.from(itemSettingSliders).reduce((sum, slider) => {
+      return sum + Number(slider.noUiSlider.get());
+    }, 0);
+
+    settingCounter.innerHTML = totalSum;
+  }
 }
 rangeInit();
 
@@ -330,6 +351,86 @@ function updateSetting() {
   }
 
   setCookie("jugs", jugs);
+}
+
+// Отображение истории
+function historyInit() {
+  // Получаем текущую дату
+  const today = new Date();
+  // Форматируем дату для сегодняшнего дня (день/месяц)
+  const dataToday = `${today.getDate()}/${today.getMonth() + 1}`;
+  // Находим элемент списка истории в документе
+  const historyList = document.querySelector(".history__list");
+  // Создаем фрагмент документа для более эффективного добавления элементов
+  const fragment = document.createDocumentFragment();
+
+  // Проходим по каждой дате в объекте history
+  for (const date in history) {
+    // Проверяем, что свойство принадлежит самому объекту history
+    if (Object.prototype.hasOwnProperty.call(history, date)) {
+      const elements = history[date]; // Элементы для данной даты
+      let historyDataLabel;
+
+      // Сравниваем дату с сегодняшней
+      if (date === dataToday) {
+        historyDataLabel = "Сегодня"; // Если даты совпадают, используем "Сегодня"
+      } else {
+        // Иначе форматируем дату для отображения
+        const [day, month] = date.split("/").map(Number); // Разделяем день и месяц
+        const formattedDate = new Date(); // Создаем новый объект даты
+        formattedDate.setDate(day); // Устанавливаем день
+        formattedDate.setMonth(month - 1); // Устанавливаем месяц (минус 1, так как месяцы нумеруются с 0)
+        const options = { day: "numeric", month: "long" }; // Опции для форматирования
+        historyDataLabel = formattedDate.toLocaleDateString("ru-RU", options); // Форматируем дату в русской локали
+      }
+
+      const className = "-" ? "expense" : "income";
+
+      // Создаем HTML для элементов истории для данной даты
+      const historyItems = elements
+        .map((item) => {
+          // Определяем тип элемента (доход или расход)
+          let isExpense = item[0] == "-";
+          const className = isExpense ? "expense" : "income";
+          const formattedItem = isExpense ? item : `+${item}`;
+          return `<div class="item-history__element ${className}">${formattedItem}</div>`;
+        })
+        .join(""); // Объединяем элементы в строку
+
+      // Создаем разметку для данной даты и ее элементов
+      const historyItemHTML = `
+                <div class="item-history__data">${historyDataLabel}</div>
+                <div class="item-history__body">
+                    ${historyItems}
+                </div>
+            `;
+
+      // Добавляем элемент в фрагмент
+      const tempLi = document.createElement("li"); // Временный элемент для парсинга HTML
+      tempLi.innerHTML = historyItemHTML;
+      tempLi.classList.add("history__item", "item-history");
+      fragment.appendChild(tempLi);
+    }
+  }
+
+  // Добавляем все элементы из фрагмента в элемент списка истории
+  historyList.innerHTML = "";
+  historyList.appendChild(fragment);
+}
+
+// добовление операции в историю
+function addTransaction(date, amount) {
+  // Проверка, существует ли дата в объекте
+  if (history.hasOwnProperty(date)) {
+    // Если существует, добавляем операцию в существующий массив
+    history[date].push(amount);
+  } else {
+    // Если не существует, создаем новый массив с новой операцией
+    history[date] = [amount];
+  }
+
+  setCookie("history", history);
+  historyInit();
 }
 
 // Ответ пользователю
@@ -367,13 +468,21 @@ function dataProcessing(formInfo, button) {
   // Внос средст
   if ("moneyInput" in formInfo) {
     formInfo.moneyInput = Number(formInfo.moneyInput);
+
     if (formInfo.jugs == "unspecified") {
-      if (Number(formInfo.moneyInput) >= 100) {
+      if (formInfo.moneyInput >= 100) {
         setTimeout(() => {
           userMessage("good", button);
         }, 0);
         amount += formInfo.moneyInput;
         calculationJugs();
+
+        // Добавление истории в объект
+        let data = new Date();
+        addTransaction(
+          `${data.getDate()}/${data.getMonth() + 1}`,
+          formInfo.moneyInput
+        );
       } else {
         setTimeout(() => {
           userMessage("error", button);
@@ -385,6 +494,13 @@ function dataProcessing(formInfo, button) {
         userMessage("good", button);
       }, 0);
       displayData();
+
+      // Добавление истории в объект
+      let data = new Date();
+      addTransaction(
+        `${data.getDate()}/${data.getMonth() + 1}`,
+        formInfo.moneyInput
+      );
     } else {
       setTimeout(() => {
         userMessage("error", button);
@@ -402,6 +518,13 @@ function dataProcessing(formInfo, button) {
         userMessage("good", button);
       }, 0);
       displayData();
+
+      // Добавление истории в объект
+      let data = new Date();
+      addTransaction(
+        `${data.getDate()}/${data.getMonth() + 1}`,
+        `-${formInfo.moneyOutput}`
+      );
     } else {
       setTimeout(() => {
         userMessage("error", button);
