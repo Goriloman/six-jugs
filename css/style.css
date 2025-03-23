@@ -844,8 +844,13 @@ textarea.input {
   right: 0;
 }
 
+.history-open .history-entry {
+  right: 0;
+}
+
 .setting,
-.money-entry {
+.money-entry,
+.history-entry {
   position: absolute;
   height: 100vh;
   overflow: auto;
@@ -856,7 +861,7 @@ textarea.input {
   top: 0;
   max-width: 478px;
   width: 100%;
-  padding: 0.625rem 1.25rem 2.5rem;
+  padding: 0.625rem 1.25rem 0.625rem;
   z-index: 4;
   overflow: auto;
   scrollbar-width: thin;
@@ -864,7 +869,8 @@ textarea.input {
 }
 
 .setting__top,
-.money-entry__top {
+.money-entry__top,
+.history-entry__top {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -878,7 +884,8 @@ textarea.input {
 }
 
 .setting__top button,
-.money-entry__top button {
+.money-entry__top button,
+.history-entry__top button {
   width: 1.875rem;
   height: 1.125rem;
   position: relative;
@@ -887,7 +894,9 @@ textarea.input {
 .setting__top button::before,
 .setting__top button::after,
 .money-entry__top button::before,
-.money-entry__top button::after {
+.money-entry__top button::after,
+.history-entry__top button::before,
+.history-entry__top button::after {
   content: "";
   -webkit-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
@@ -899,7 +908,8 @@ textarea.input {
 }
 
 .setting__top button::before,
-.money-entry__top button::before {
+.money-entry__top button::before,
+.history-entry__top button::before {
   top: calc(50% - 0.0625rem);
   -webkit-transform: rotate(-45deg);
       -ms-transform: rotate(-45deg);
@@ -907,7 +917,8 @@ textarea.input {
 }
 
 .setting__top button::after,
-.money-entry__top button::after {
+.money-entry__top button::after,
+.history-entry__top button::after {
   bottom: calc(50% - 0.0625rem);
   -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
@@ -915,38 +926,51 @@ textarea.input {
 }
 
 .setting__title,
-.money-entry__title {
+.money-entry__title,
+.history-entry__title {
   font-weight: 400;
   color: #000;
 }
 
 @supports (font-size: clamp( 1.25rem , 1.0030864198rem  +  1.2345679012vw , 1.875rem )) {
   .setting__title,
-  .money-entry__title {
+  .money-entry__title,
+  .history-entry__title {
     font-size: clamp( 1.25rem , 1.0030864198rem  +  1.2345679012vw , 1.875rem );
   }
 }
 
 @supports not (font-size: clamp( 1.25rem , 1.0030864198rem  +  1.2345679012vw , 1.875rem )) {
   .setting__title,
-  .money-entry__title {
+  .money-entry__title,
+  .history-entry__title {
     font-size: calc(1.25rem + 0.625 * (100vw - 20rem) / 50.625);
   }
 }
 
 .setting__list,
-.money-entry__list {
+.money-entry__list,
+.history-entry__list {
   margin-top: 1.5625rem;
   max-width: 60.8%;
 }
 
 .setting__item:not(:last-child),
-.money-entry__item:not(:last-child) {
+.money-entry__item:not(:last-child),
+.history-entry__item:not(:last-child) {
   margin-bottom: 1.125rem;
 }
 
+.setting__counter,
+.money-entry__counter,
+.history-entry__counter {
+  margin-top: 0.9375rem;
+  font-size: 1rem;
+}
+
 .setting__button,
-.money-entry__button {
+.money-entry__button,
+.history-entry__button {
   margin-top: 1.25rem;
   max-width: 60.8%;
   width: 100%;
@@ -962,7 +986,8 @@ textarea.input {
   gap: 0.625rem;
 }
 
-.money-entry {
+.money-entry,
+.history-entry {
   z-index: 6;
 }
 
@@ -1057,6 +1082,44 @@ textarea.input {
   font-size: 1rem;
 }
 
+.history__list {
+  margin-top: 1.25rem;
+}
+
+.item-history:not(:last-child) {
+  margin-bottom: 1.25rem;
+}
+
+.item-history__data {
+  font-weight: 400;
+  color: #000;
+}
+
+@supports (font-size: clamp( 0.9375rem , 0.6905864198rem  +  1.2345679012vw , 1.5625rem )) {
+  .item-history__data {
+    font-size: clamp( 0.9375rem , 0.6905864198rem  +  1.2345679012vw , 1.5625rem );
+  }
+}
+
+@supports not (font-size: clamp( 0.9375rem , 0.6905864198rem  +  1.2345679012vw , 1.5625rem )) {
+  .item-history__data {
+    font-size: calc(0.9375rem + 0.625 * (100vw - 20rem) / 50.625);
+  }
+}
+
+.item-history__element {
+  margin-top: 0.3125rem;
+  font-size: 1.125rem;
+}
+
+.item-history__element.expense {
+  color: red;
+}
+
+.item-history__element.income {
+  color: green;
+}
+
 .icon-menu {
   display: block;
   position: relative;
@@ -1109,7 +1172,8 @@ textarea.input {
           transform: rotate(45deg);
 }
 
-.icon-money svg {
+.icon-money svg,
+.icon-history svg {
   width: 100%;
   max-width: 2.16875rem;
 }

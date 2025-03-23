@@ -134,6 +134,12 @@
                 document.documentElement.classList.toggle("money-open");
             }
         }));
+        if (document.querySelector(".icon-history")) document.addEventListener("click", (function(e) {
+            if (bodyLockStatus && e.target.closest(".icon-history")) {
+                bodyLockToggle();
+                document.documentElement.classList.toggle("history-open");
+            }
+        }));
     }
     function functions_FLS(message) {
         setTimeout((() => {
@@ -2173,7 +2179,9 @@
             title: "Подарки"
         }
     };
+    let script_history = {};
     if (getCookie("jugs")) jugs = getCookie("jugs", true);
+    if (getCookie("history")) script_history = getCookie("history", true);
     function displayData() {
         let jugsItems = document.querySelector(".jugs__items");
         jugsItems.innerHTML = "";
@@ -2183,10 +2191,13 @@
             jugsItems.innerHTML += item;
         }
         script_rangeInit();
+        historyInit();
         setCookie("jugs", jugs);
+        setCookie("history", script_history);
     }
     displayData();
     function script_rangeInit() {
+        const settingCounter = document.querySelector(".setting__counter span");
         const settingList = document.querySelector(".setting__list");
         settingList.innerHTML = "";
         const fragment = document.createDocumentFragment();
@@ -2215,6 +2226,14 @@
                 settingSliderValue.innerHTML = `${Number(values[handle]).toFixed(0)}%`;
             }));
         }
+        let itemSettingSliders = document.querySelectorAll(".item-setting__slider");
+        itemSettingSliders.forEach((slider => {
+            slider.noUiSlider.on("update", updateSum);
+        }));
+        function updateSum() {
+            let totalSum = Array.from(itemSettingSliders).reduce(((sum, slider) => sum + Number(slider.noUiSlider.get())), 0);
+            settingCounter.innerHTML = totalSum;
+        }
     }
     script_rangeInit();
     function updateSetting() {
@@ -2225,6 +2244,45 @@
             settingSlider.noUiSlider.set([ jugElement.percent ]);
         }
         setCookie("jugs", jugs);
+    }
+    function historyInit() {
+        const today = new Date;
+        const dataToday = `${today.getDate()}/${today.getMonth() + 1}`;
+        const historyList = document.querySelector(".history__list");
+        const fragment = document.createDocumentFragment();
+        for (const date in script_history) if (Object.prototype.hasOwnProperty.call(script_history, date)) {
+            const elements = script_history[date];
+            let historyDataLabel;
+            if (date === dataToday) historyDataLabel = "Сегодня"; else {
+                const [day, month] = date.split("/").map(Number);
+                const formattedDate = new Date;
+                formattedDate.setDate(day);
+                formattedDate.setMonth(month - 1);
+                const options = {
+                    day: "numeric",
+                    month: "long"
+                };
+                historyDataLabel = formattedDate.toLocaleDateString("ru-RU", options);
+            }
+            const historyItems = elements.map((item => {
+                let isExpense = item[0] == "-";
+                const className = isExpense ? "expense" : "income";
+                const formattedItem = isExpense ? item : `+${item}`;
+                return `<div class="item-history__element ${className}">${formattedItem}</div>`;
+            })).join("");
+            const historyItemHTML = `\n                <div class="item-history__data">${historyDataLabel}</div>\n                <div class="item-history__body">\n                    ${historyItems}\n                </div>\n            `;
+            const tempLi = document.createElement("li");
+            tempLi.innerHTML = historyItemHTML;
+            tempLi.classList.add("history__item", "item-history");
+            fragment.appendChild(tempLi);
+        }
+        historyList.innerHTML = "";
+        historyList.appendChild(fragment);
+    }
+    function addTransaction(date, amount) {
+        if (script_history.hasOwnProperty(date)) script_history[date].push(amount); else script_history[date] = [ amount ];
+        setCookie("history", script_history);
+        historyInit();
     }
     function userMessage(text, element) {
         element.classList.remove("good", "error");
@@ -2249,12 +2307,14 @@
     function dataProcessing(formInfo, button) {
         if ("moneyInput" in formInfo) {
             formInfo.moneyInput = Number(formInfo.moneyInput);
-            if (formInfo.jugs == "unspecified") if (Number(formInfo.moneyInput) >= 100) {
+            if (formInfo.jugs == "unspecified") if (formInfo.moneyInput >= 100) {
                 setTimeout((() => {
                     userMessage("good", button);
                 }), 0);
                 amount += formInfo.moneyInput;
                 calculationJugs();
+                let data = new Date;
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0); else if (formInfo.jugs) {
@@ -2263,6 +2323,8 @@
                     userMessage("good", button);
                 }), 0);
                 displayData();
+                let data = new Date;
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0);
@@ -2275,6 +2337,8 @@
                     userMessage("good", button);
                 }), 0);
                 displayData();
+                let data = new Date;
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, `-${formInfo.moneyOutput}`);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0);
