@@ -2121,6 +2121,9 @@
                 }
                 userMessage("good", buttonReset);
                 displayData();
+                script_history = {};
+                setCookie("history", script_history);
+                historyInit();
             }
             if (targetElement.closest(".button-apply")) {
                 const buttonApply = document.querySelector(".button-apply");
