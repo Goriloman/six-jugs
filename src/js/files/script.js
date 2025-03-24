@@ -130,6 +130,9 @@ window.onload = function () {
       userMessage("good", buttonReset);
 
       displayData();
+
+      history = {};
+      setCookie("history", history);
     }
 
     // Применить настройки
