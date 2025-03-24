@@ -133,6 +133,7 @@ window.onload = function () {
 
       history = {};
       setCookie("history", history);
+      historyInit();
     }
 
     // Применить настройки
