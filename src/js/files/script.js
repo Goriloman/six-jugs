@@ -539,6 +539,7 @@ function dataProcessing(formInfo, button) {
 
     if (jugs[formInfo.jugs].money >= formInfo.moneyOutput) {
       jugs[formInfo.jugs].money -= formInfo.moneyOutput;
+      jugs[formInfo.jugs].money = jugs[formInfo.jugs].toFixed(2)
       setTimeout(() => {
         userMessage("good", button);
       }, 0);
