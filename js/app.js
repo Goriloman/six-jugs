@@ -1,95 +1,25 @@
 (() => {
     "use strict";
-    const modules_flsModules = {};
     function isWebp() {
         function testWebP(callback) {
             let webP = new Image;
-            webP.onload = webP.onerror = function() {
+            webP.onload = webP.onerror = function () {
                 callback(webP.height == 2);
             };
             webP.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA";
         }
-        testWebP((function(support) {
+        testWebP((function (support) {
             let className = support === true ? "webp" : "no-webp";
             document.documentElement.classList.add(className);
         }));
     }
-    let _slideUp = (target, duration = 500, showmore = 0) => {
-        if (!target.classList.contains("_slide")) {
-            target.classList.add("_slide");
-            target.style.transitionProperty = "height, margin, padding";
-            target.style.transitionDuration = duration + "ms";
-            target.style.height = `${target.offsetHeight}px`;
-            target.offsetHeight;
-            target.style.overflow = "hidden";
-            target.style.height = showmore ? `${showmore}px` : `0px`;
-            target.style.paddingTop = 0;
-            target.style.paddingBottom = 0;
-            target.style.marginTop = 0;
-            target.style.marginBottom = 0;
-            window.setTimeout((() => {
-                target.hidden = !showmore ? true : false;
-                !showmore ? target.style.removeProperty("height") : null;
-                target.style.removeProperty("padding-top");
-                target.style.removeProperty("padding-bottom");
-                target.style.removeProperty("margin-top");
-                target.style.removeProperty("margin-bottom");
-                !showmore ? target.style.removeProperty("overflow") : null;
-                target.style.removeProperty("transition-duration");
-                target.style.removeProperty("transition-property");
-                target.classList.remove("_slide");
-                document.dispatchEvent(new CustomEvent("slideUpDone", {
-                    detail: {
-                        target
-                    }
-                }));
-            }), duration);
-        }
-    };
-    let _slideDown = (target, duration = 500, showmore = 0) => {
-        if (!target.classList.contains("_slide")) {
-            target.classList.add("_slide");
-            target.hidden = target.hidden ? false : null;
-            showmore ? target.style.removeProperty("height") : null;
-            let height = target.offsetHeight;
-            target.style.overflow = "hidden";
-            target.style.height = showmore ? `${showmore}px` : `0px`;
-            target.style.paddingTop = 0;
-            target.style.paddingBottom = 0;
-            target.style.marginTop = 0;
-            target.style.marginBottom = 0;
-            target.offsetHeight;
-            target.style.transitionProperty = "height, margin, padding";
-            target.style.transitionDuration = duration + "ms";
-            target.style.height = height + "px";
-            target.style.removeProperty("padding-top");
-            target.style.removeProperty("padding-bottom");
-            target.style.removeProperty("margin-top");
-            target.style.removeProperty("margin-bottom");
-            window.setTimeout((() => {
-                target.style.removeProperty("height");
-                target.style.removeProperty("overflow");
-                target.style.removeProperty("transition-duration");
-                target.style.removeProperty("transition-property");
-                target.classList.remove("_slide");
-                document.dispatchEvent(new CustomEvent("slideDownDone", {
-                    detail: {
-                        target
-                    }
-                }));
-            }), duration);
-        }
-    };
-    let _slideToggle = (target, duration = 500) => {
-        if (target.hidden) return _slideDown(target, duration); else return _slideUp(target, duration);
-    };
-    let bodyLockStatus = true;
-    let bodyLockToggle = (delay = 500) => {
+    let functions_bodyLockStatus = true;
+    let functions_bodyLockToggle = (delay = 500) => {
         if (document.documentElement.classList.contains("lock")) bodyUnlock(delay); else bodyLock(delay);
     };
     let bodyUnlock = (delay = 500) => {
         let body = document.querySelector("body");
-        if (bodyLockStatus) {
+        if (functions_bodyLockStatus) {
             let lock_padding = document.querySelectorAll("[data-lp]");
             setTimeout((() => {
                 for (let index = 0; index < lock_padding.length; index++) {
@@ -99,15 +29,15 @@
                 body.style.paddingRight = "0px";
                 document.documentElement.classList.remove("lock");
             }), delay);
-            bodyLockStatus = false;
-            setTimeout((function() {
-                bodyLockStatus = true;
+            functions_bodyLockStatus = false;
+            setTimeout((function () {
+                functions_bodyLockStatus = true;
             }), delay);
         }
     };
     let bodyLock = (delay = 500) => {
         let body = document.querySelector("body");
-        if (bodyLockStatus) {
+        if (functions_bodyLockStatus) {
             let lock_padding = document.querySelectorAll("[data-lp]");
             for (let index = 0; index < lock_padding.length; index++) {
                 const el = lock_padding[index];
@@ -115,457 +45,22 @@
             }
             body.style.paddingRight = window.innerWidth - document.querySelector(".wrapper").offsetWidth + "px";
             document.documentElement.classList.add("lock");
-            bodyLockStatus = false;
-            setTimeout((function() {
-                bodyLockStatus = true;
+            functions_bodyLockStatus = false;
+            setTimeout((function () {
+                functions_bodyLockStatus = true;
             }), delay);
         }
     };
     function menuInit() {
-        if (document.querySelector(".icon-menu")) document.addEventListener("click", (function(e) {
-            if (bodyLockStatus && e.target.closest(".icon-menu")) {
-                bodyLockToggle();
+        if (document.querySelector(".icon-menu")) document.addEventListener("click", (function (e) {
+            if (functions_bodyLockStatus && e.target.closest(".icon-menu")) {
+                functions_bodyLockToggle();
                 document.documentElement.classList.toggle("menu-open");
             }
         }));
-        if (document.querySelector(".icon-money")) document.addEventListener("click", (function(e) {
-            if (bodyLockStatus && e.target.closest(".icon-money")) {
-                bodyLockToggle();
-                document.documentElement.classList.toggle("money-open");
-            }
-        }));
-        if (document.querySelector(".icon-history")) document.addEventListener("click", (function(e) {
-            if (bodyLockStatus && e.target.closest(".icon-history")) {
-                bodyLockToggle();
-                document.documentElement.classList.toggle("history-open");
-            }
-        }));
     }
-    function functions_FLS(message) {
-        setTimeout((() => {
-            if (window.FLS) console.log(message);
-        }), 0);
-    }
-    function formFieldsInit(options = {
-        viewPass: false
-    }) {
-        const formFields = document.querySelectorAll("input[placeholder],textarea[placeholder]");
-        if (formFields.length) formFields.forEach((formField => {
-            if (!formField.hasAttribute("data-placeholder-nohide")) formField.dataset.placeholder = formField.placeholder;
-        }));
-        document.body.addEventListener("focusin", (function(e) {
-            const targetElement = e.target;
-            if (targetElement.tagName === "INPUT" || targetElement.tagName === "TEXTAREA") {
-                if (targetElement.dataset.placeholder) targetElement.placeholder = "";
-                if (!targetElement.hasAttribute("data-no-focus-classes")) {
-                    targetElement.classList.add("_form-focus");
-                    targetElement.parentElement.classList.add("_form-focus");
-                }
-                formValidate.removeError(targetElement);
-            }
-        }));
-        document.body.addEventListener("focusout", (function(e) {
-            const targetElement = e.target;
-            if (targetElement.tagName === "INPUT" || targetElement.tagName === "TEXTAREA") {
-                if (targetElement.dataset.placeholder) targetElement.placeholder = targetElement.dataset.placeholder;
-                if (!targetElement.hasAttribute("data-no-focus-classes")) {
-                    targetElement.classList.remove("_form-focus");
-                    targetElement.parentElement.classList.remove("_form-focus");
-                }
-                if (targetElement.hasAttribute("data-validate")) formValidate.validateInput(targetElement);
-            }
-        }));
-        if (options.viewPass) document.addEventListener("click", (function(e) {
-            let targetElement = e.target;
-            if (targetElement.closest('[class*="__viewpass"]')) {
-                let inputType = targetElement.classList.contains("_viewpass-active") ? "password" : "text";
-                targetElement.parentElement.querySelector("input").setAttribute("type", inputType);
-                targetElement.classList.toggle("_viewpass-active");
-            }
-        }));
-    }
-    let formValidate = {
-        getErrors(form) {
-            let error = 0;
-            let formRequiredItems = form.querySelectorAll("*[data-required]");
-            if (formRequiredItems.length) formRequiredItems.forEach((formRequiredItem => {
-                if ((formRequiredItem.offsetParent !== null || formRequiredItem.tagName === "SELECT") && !formRequiredItem.disabled) error += this.validateInput(formRequiredItem);
-            }));
-            return error;
-        },
-        validateInput(formRequiredItem) {
-            let error = 0;
-            if (formRequiredItem.dataset.required === "email") {
-                formRequiredItem.value = formRequiredItem.value.replace(" ", "");
-                if (this.emailTest(formRequiredItem)) {
-                    this.addError(formRequiredItem);
-                    error++;
-                } else this.removeError(formRequiredItem);
-            } else if (formRequiredItem.type === "checkbox" && !formRequiredItem.checked) {
-                this.addError(formRequiredItem);
-                error++;
-            } else if (!formRequiredItem.value.trim()) {
-                this.addError(formRequiredItem);
-                error++;
-            } else this.removeError(formRequiredItem);
-            return error;
-        },
-        addError(formRequiredItem) {
-            formRequiredItem.classList.add("_form-error");
-            formRequiredItem.parentElement.classList.add("_form-error");
-            let inputError = formRequiredItem.parentElement.querySelector(".form__error");
-            if (inputError) formRequiredItem.parentElement.removeChild(inputError);
-            if (formRequiredItem.dataset.error) formRequiredItem.parentElement.insertAdjacentHTML("beforeend", `<div class="form__error">${formRequiredItem.dataset.error}</div>`);
-        },
-        removeError(formRequiredItem) {
-            formRequiredItem.classList.remove("_form-error");
-            formRequiredItem.parentElement.classList.remove("_form-error");
-            if (formRequiredItem.parentElement.querySelector(".form__error")) formRequiredItem.parentElement.removeChild(formRequiredItem.parentElement.querySelector(".form__error"));
-        },
-        formClean(form) {
-            form.reset();
-            setTimeout((() => {
-                let inputs = form.querySelectorAll("input,textarea");
-                for (let index = 0; index < inputs.length; index++) {
-                    const el = inputs[index];
-                    el.parentElement.classList.remove("_form-focus");
-                    el.classList.remove("_form-focus");
-                    formValidate.removeError(el);
-                }
-                let checkboxes = form.querySelectorAll(".checkbox__input");
-                if (checkboxes.length > 0) for (let index = 0; index < checkboxes.length; index++) {
-                    const checkbox = checkboxes[index];
-                    checkbox.checked = false;
-                }
-                if (modules_flsModules.select) {
-                    let selects = form.querySelectorAll(".select");
-                    if (selects.length) for (let index = 0; index < selects.length; index++) {
-                        const select = selects[index].querySelector("select");
-                        modules_flsModules.select.selectBuild(select);
-                    }
-                }
-            }), 0);
-        },
-        emailTest(formRequiredItem) {
-            return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/.test(formRequiredItem.value);
-        }
-    };
-    class SelectConstructor {
-        constructor(props, data = null) {
-            let defaultConfig = {
-                init: true,
-                logging: true
-            };
-            this.config = Object.assign(defaultConfig, props);
-            this.selectClasses = {
-                classSelect: "select",
-                classSelectBody: "select__body",
-                classSelectTitle: "select__title",
-                classSelectValue: "select__value",
-                classSelectLabel: "select__label",
-                classSelectInput: "select__input",
-                classSelectText: "select__text",
-                classSelectLink: "select__link",
-                classSelectOptions: "select__options",
-                classSelectOptionsScroll: "select__scroll",
-                classSelectOption: "select__option",
-                classSelectContent: "select__content",
-                classSelectRow: "select__row",
-                classSelectData: "select__asset",
-                classSelectDisabled: "_select-disabled",
-                classSelectTag: "_select-tag",
-                classSelectOpen: "_select-open",
-                classSelectActive: "_select-active",
-                classSelectFocus: "_select-focus",
-                classSelectMultiple: "_select-multiple",
-                classSelectCheckBox: "_select-checkbox",
-                classSelectOptionSelected: "_select-selected",
-                classSelectPseudoLabel: "_select-pseudo-label"
-            };
-            this._this = this;
-            if (this.config.init) {
-                const selectItems = data ? document.querySelectorAll(data) : document.querySelectorAll("select");
-                if (selectItems.length) {
-                    this.selectsInit(selectItems);
-                    this.setLogging(`Проснулся, построил селектов: (${selectItems.length})`);
-                } else this.setLogging("Сплю, нет ни одного select zzZZZzZZz");
-            }
-        }
-        getSelectClass(className) {
-            return `.${className}`;
-        }
-        getSelectElement(selectItem, className) {
-            return {
-                originalSelect: selectItem.querySelector("select"),
-                selectElement: selectItem.querySelector(this.getSelectClass(className))
-            };
-        }
-        selectsInit(selectItems) {
-            selectItems.forEach(((originalSelect, index) => {
-                this.selectInit(originalSelect, index + 1);
-            }));
-            document.addEventListener("click", function(e) {
-                this.selectsActions(e);
-            }.bind(this));
-            document.addEventListener("keydown", function(e) {
-                this.selectsActions(e);
-            }.bind(this));
-            document.addEventListener("focusin", function(e) {
-                this.selectsActions(e);
-            }.bind(this));
-            document.addEventListener("focusout", function(e) {
-                this.selectsActions(e);
-            }.bind(this));
-        }
-        selectInit(originalSelect, index) {
-            const _this = this;
-            let selectItem = document.createElement("div");
-            selectItem.classList.add(this.selectClasses.classSelect);
-            originalSelect.parentNode.insertBefore(selectItem, originalSelect);
-            selectItem.appendChild(originalSelect);
-            originalSelect.hidden = true;
-            index ? originalSelect.dataset.id = index : null;
-            if (this.getSelectPlaceholder(originalSelect)) {
-                originalSelect.dataset.placeholder = this.getSelectPlaceholder(originalSelect).value;
-                if (this.getSelectPlaceholder(originalSelect).label.show) {
-                    const selectItemTitle = this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement;
-                    selectItemTitle.insertAdjacentHTML("afterbegin", `<span class="${this.selectClasses.classSelectLabel}">${this.getSelectPlaceholder(originalSelect).label.text ? this.getSelectPlaceholder(originalSelect).label.text : this.getSelectPlaceholder(originalSelect).value}</span>`);
-                }
-            }
-            selectItem.insertAdjacentHTML("beforeend", `<div class="${this.selectClasses.classSelectBody}"><div hidden class="${this.selectClasses.classSelectOptions}"></div></div>`);
-            this.selectBuild(originalSelect);
-            originalSelect.dataset.speed = originalSelect.dataset.speed ? originalSelect.dataset.speed : "150";
-            originalSelect.addEventListener("change", (function(e) {
-                _this.selectChange(e);
-            }));
-        }
-        selectBuild(originalSelect) {
-            const selectItem = originalSelect.parentElement;
-            selectItem.dataset.id = originalSelect.dataset.id;
-            originalSelect.dataset.classModif ? selectItem.classList.add(`select_${originalSelect.dataset.classModif}`) : null;
-            originalSelect.multiple ? selectItem.classList.add(this.selectClasses.classSelectMultiple) : selectItem.classList.remove(this.selectClasses.classSelectMultiple);
-            originalSelect.hasAttribute("data-checkbox") && originalSelect.multiple ? selectItem.classList.add(this.selectClasses.classSelectCheckBox) : selectItem.classList.remove(this.selectClasses.classSelectCheckBox);
-            this.setSelectTitleValue(selectItem, originalSelect);
-            this.setOptions(selectItem, originalSelect);
-            originalSelect.hasAttribute("data-search") ? this.searchActions(selectItem) : null;
-            originalSelect.hasAttribute("data-open") ? this.selectAction(selectItem) : null;
-            this.selectDisabled(selectItem, originalSelect);
-        }
-        selectsActions(e) {
-            const targetElement = e.target;
-            const targetType = e.type;
-            if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelect)) || targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag))) {
-                const selectItem = targetElement.closest(".select") ? targetElement.closest(".select") : document.querySelector(`.${this.selectClasses.classSelect}[data-id="${targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag)).dataset.selectId}"]`);
-                const originalSelect = this.getSelectElement(selectItem).originalSelect;
-                if (targetType === "click") {
-                    if (!originalSelect.disabled) if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag))) {
-                        const targetTag = targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTag));
-                        const optionItem = document.querySelector(`.${this.selectClasses.classSelect}[data-id="${targetTag.dataset.selectId}"] .select__option[data-value="${targetTag.dataset.value}"]`);
-                        this.optionAction(selectItem, originalSelect, optionItem);
-                    } else if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelectTitle))) this.selectAction(selectItem); else if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelectOption))) {
-                        const optionItem = targetElement.closest(this.getSelectClass(this.selectClasses.classSelectOption));
-                        this.optionAction(selectItem, originalSelect, optionItem);
-                    }
-                } else if (targetType === "focusin" || targetType === "focusout") {
-                    if (targetElement.closest(this.getSelectClass(this.selectClasses.classSelect))) targetType === "focusin" ? selectItem.classList.add(this.selectClasses.classSelectFocus) : selectItem.classList.remove(this.selectClasses.classSelectFocus);
-                } else if (targetType === "keydown" && e.code === "Escape") this.selectsСlose();
-            } else this.selectsСlose();
-        }
-        selectsСlose(selectOneGroup) {
-            const selectsGroup = selectOneGroup ? selectOneGroup : document;
-            const selectActiveItems = selectsGroup.querySelectorAll(`${this.getSelectClass(this.selectClasses.classSelect)}${this.getSelectClass(this.selectClasses.classSelectOpen)}`);
-            if (selectActiveItems.length) selectActiveItems.forEach((selectActiveItem => {
-                this.selectСlose(selectActiveItem);
-            }));
-        }
-        selectСlose(selectItem) {
-            const originalSelect = this.getSelectElement(selectItem).originalSelect;
-            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
-            if (!selectOptions.classList.contains("_slide")) {
-                selectItem.classList.remove(this.selectClasses.classSelectOpen);
-                _slideUp(selectOptions, originalSelect.dataset.speed);
-            }
-        }
-        selectAction(selectItem) {
-            const originalSelect = this.getSelectElement(selectItem).originalSelect;
-            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
-            if (originalSelect.closest("[data-one-select]")) {
-                const selectOneGroup = originalSelect.closest("[data-one-select]");
-                this.selectsСlose(selectOneGroup);
-            }
-            if (!selectOptions.classList.contains("_slide")) {
-                selectItem.classList.toggle(this.selectClasses.classSelectOpen);
-                _slideToggle(selectOptions, originalSelect.dataset.speed);
-            }
-        }
-        setSelectTitleValue(selectItem, originalSelect) {
-            const selectItemBody = this.getSelectElement(selectItem, this.selectClasses.classSelectBody).selectElement;
-            const selectItemTitle = this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement;
-            if (selectItemTitle) selectItemTitle.remove();
-            selectItemBody.insertAdjacentHTML("afterbegin", this.getSelectTitleValue(selectItem, originalSelect));
-        }
-        getSelectTitleValue(selectItem, originalSelect) {
-            let selectTitleValue = this.getSelectedOptionsData(originalSelect, 2).html;
-            if (originalSelect.multiple && originalSelect.hasAttribute("data-tags")) {
-                selectTitleValue = this.getSelectedOptionsData(originalSelect).elements.map((option => `<span role="button" data-select-id="${selectItem.dataset.id}" data-value="${option.value}" class="_select-tag">${this.getSelectElementContent(option)}</span>`)).join("");
-                if (originalSelect.dataset.tags && document.querySelector(originalSelect.dataset.tags)) {
-                    document.querySelector(originalSelect.dataset.tags).innerHTML = selectTitleValue;
-                    if (originalSelect.hasAttribute("data-search")) selectTitleValue = false;
-                }
-            }
-            selectTitleValue = selectTitleValue.length ? selectTitleValue : originalSelect.dataset.placeholder ? originalSelect.dataset.placeholder : "";
-            let pseudoAttribute = "";
-            let pseudoAttributeClass = "";
-            if (originalSelect.hasAttribute("data-pseudo-label")) {
-                pseudoAttribute = originalSelect.dataset.pseudoLabel ? ` data-pseudo-label="${originalSelect.dataset.pseudoLabel}"` : ` data-pseudo-label="Заполните атрибут"`;
-                pseudoAttributeClass = ` ${this.selectClasses.classSelectPseudoLabel}`;
-            }
-            this.getSelectedOptionsData(originalSelect).values.length ? selectItem.classList.add(this.selectClasses.classSelectActive) : selectItem.classList.remove(this.selectClasses.classSelectActive);
-            if (originalSelect.hasAttribute("data-search")) return `<div class="${this.selectClasses.classSelectTitle}"><span${pseudoAttribute} class="${this.selectClasses.classSelectValue}"><input autocomplete="off" type="text" placeholder="${selectTitleValue}" data-placeholder="${selectTitleValue}" class="${this.selectClasses.classSelectInput}"></span></div>`; else {
-                const customClass = this.getSelectedOptionsData(originalSelect).elements.length && this.getSelectedOptionsData(originalSelect).elements[0].dataset.class ? ` ${this.getSelectedOptionsData(originalSelect).elements[0].dataset.class}` : "";
-                return `<button type="button" class="${this.selectClasses.classSelectTitle}"><span${pseudoAttribute} class="${this.selectClasses.classSelectValue}${pseudoAttributeClass}"><span class="${this.selectClasses.classSelectContent}${customClass}">${selectTitleValue}</span></span></button>`;
-            }
-        }
-        getSelectElementContent(selectOption) {
-            const selectOptionData = selectOption.dataset.asset ? `${selectOption.dataset.asset}` : "";
-            const selectOptionDataHTML = selectOptionData.indexOf("img") >= 0 ? `<img src="${selectOptionData}" alt="">` : selectOptionData;
-            let selectOptionContentHTML = ``;
-            selectOptionContentHTML += selectOptionData ? `<span class="${this.selectClasses.classSelectRow}">` : "";
-            selectOptionContentHTML += selectOptionData ? `<span class="${this.selectClasses.classSelectData}">` : "";
-            selectOptionContentHTML += selectOptionData ? selectOptionDataHTML : "";
-            selectOptionContentHTML += selectOptionData ? `</span>` : "";
-            selectOptionContentHTML += selectOptionData ? `<span class="${this.selectClasses.classSelectText}">` : "";
-            selectOptionContentHTML += selectOption.textContent;
-            selectOptionContentHTML += selectOptionData ? `</span>` : "";
-            selectOptionContentHTML += selectOptionData ? `</span>` : "";
-            return selectOptionContentHTML;
-        }
-        getSelectPlaceholder(originalSelect) {
-            const selectPlaceholder = Array.from(originalSelect.options).find((option => !option.value));
-            if (selectPlaceholder) return {
-                value: selectPlaceholder.textContent,
-                show: selectPlaceholder.hasAttribute("data-show"),
-                label: {
-                    show: selectPlaceholder.hasAttribute("data-label"),
-                    text: selectPlaceholder.dataset.label
-                }
-            };
-        }
-        getSelectedOptionsData(originalSelect, type) {
-            let selectedOptions = [];
-            if (originalSelect.multiple) selectedOptions = Array.from(originalSelect.options).filter((option => option.value)).filter((option => option.selected)); else selectedOptions.push(originalSelect.options[originalSelect.selectedIndex]);
-            return {
-                elements: selectedOptions.map((option => option)),
-                values: selectedOptions.filter((option => option.value)).map((option => option.value)),
-                html: selectedOptions.map((option => this.getSelectElementContent(option)))
-            };
-        }
-        getOptions(originalSelect) {
-            let selectOptionsScroll = originalSelect.hasAttribute("data-scroll") ? `data-simplebar` : "";
-            let selectOptionsScrollHeight = originalSelect.dataset.scroll ? `style="max-height:${originalSelect.dataset.scroll}px"` : "";
-            let selectOptions = Array.from(originalSelect.options);
-            if (selectOptions.length > 0) {
-                let selectOptionsHTML = ``;
-                if (this.getSelectPlaceholder(originalSelect) && !this.getSelectPlaceholder(originalSelect).show || originalSelect.multiple) selectOptions = selectOptions.filter((option => option.value));
-                selectOptionsHTML += selectOptionsScroll ? `<div ${selectOptionsScroll} ${selectOptionsScrollHeight} class="${this.selectClasses.classSelectOptionsScroll}">` : "";
-                selectOptions.forEach((selectOption => {
-                    selectOptionsHTML += this.getOption(selectOption, originalSelect);
-                }));
-                selectOptionsHTML += selectOptionsScroll ? `</div>` : "";
-                return selectOptionsHTML;
-            }
-        }
-        getOption(selectOption, originalSelect) {
-            const selectOptionSelected = selectOption.selected && originalSelect.multiple ? ` ${this.selectClasses.classSelectOptionSelected}` : "";
-            const selectOptionHide = selectOption.selected && !originalSelect.hasAttribute("data-show-selected") && !originalSelect.multiple ? `hidden` : ``;
-            const selectOptionClass = selectOption.dataset.class ? ` ${selectOption.dataset.class}` : "";
-            const selectOptionLink = selectOption.dataset.href ? selectOption.dataset.href : false;
-            const selectOptionLinkTarget = selectOption.hasAttribute("data-href-blank") ? `target="_blank"` : "";
-            let selectOptionHTML = ``;
-            selectOptionHTML += selectOptionLink ? `<a ${selectOptionLinkTarget} ${selectOptionHide} href="${selectOptionLink}" data-value="${selectOption.value}" class="${this.selectClasses.classSelectOption}${selectOptionClass}${selectOptionSelected}">` : `<button ${selectOptionHide} class="${this.selectClasses.classSelectOption}${selectOptionClass}${selectOptionSelected}" data-value="${selectOption.value}" type="button">`;
-            selectOptionHTML += this.getSelectElementContent(selectOption);
-            selectOptionHTML += selectOptionLink ? `</a>` : `</button>`;
-            return selectOptionHTML;
-        }
-        setOptions(selectItem, originalSelect) {
-            const selectItemOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
-            selectItemOptions.innerHTML = this.getOptions(originalSelect);
-        }
-        optionAction(selectItem, originalSelect, optionItem) {
-            if (originalSelect.multiple) {
-                optionItem.classList.toggle(this.selectClasses.classSelectOptionSelected);
-                const originalSelectSelectedItems = this.getSelectedOptionsData(originalSelect).elements;
-                originalSelectSelectedItems.forEach((originalSelectSelectedItem => {
-                    originalSelectSelectedItem.removeAttribute("selected");
-                }));
-                const selectSelectedItems = selectItem.querySelectorAll(this.getSelectClass(this.selectClasses.classSelectOptionSelected));
-                selectSelectedItems.forEach((selectSelectedItems => {
-                    originalSelect.querySelector(`option[value="${selectSelectedItems.dataset.value}"]`).setAttribute("selected", "selected");
-                }));
-            } else {
-                if (!originalSelect.hasAttribute("data-show-selected")) {
-                    if (selectItem.querySelector(`${this.getSelectClass(this.selectClasses.classSelectOption)}[hidden]`)) selectItem.querySelector(`${this.getSelectClass(this.selectClasses.classSelectOption)}[hidden]`).hidden = false;
-                    optionItem.hidden = true;
-                }
-                originalSelect.value = optionItem.hasAttribute("data-value") ? optionItem.dataset.value : optionItem.textContent;
-                this.selectAction(selectItem);
-            }
-            this.setSelectTitleValue(selectItem, originalSelect);
-            this.setSelectChange(originalSelect);
-        }
-        selectChange(e) {
-            const originalSelect = e.target;
-            this.selectBuild(originalSelect);
-            this.setSelectChange(originalSelect);
-        }
-        setSelectChange(originalSelect) {
-            if (originalSelect.hasAttribute("data-validate")) formValidate.validateInput(originalSelect);
-            if (originalSelect.hasAttribute("data-submit") && originalSelect.value) {
-                let tempButton = document.createElement("button");
-                tempButton.type = "submit";
-                originalSelect.closest("form").append(tempButton);
-                tempButton.click();
-                tempButton.remove();
-            }
-            const selectItem = originalSelect.parentElement;
-            this.selectCallback(selectItem, originalSelect);
-        }
-        selectDisabled(selectItem, originalSelect) {
-            if (originalSelect.disabled) {
-                selectItem.classList.add(this.selectClasses.classSelectDisabled);
-                this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement.disabled = true;
-            } else {
-                selectItem.classList.remove(this.selectClasses.classSelectDisabled);
-                this.getSelectElement(selectItem, this.selectClasses.classSelectTitle).selectElement.disabled = false;
-            }
-        }
-        searchActions(selectItem) {
-            this.getSelectElement(selectItem).originalSelect;
-            const selectInput = this.getSelectElement(selectItem, this.selectClasses.classSelectInput).selectElement;
-            const selectOptions = this.getSelectElement(selectItem, this.selectClasses.classSelectOptions).selectElement;
-            const selectOptionsItems = selectOptions.querySelectorAll(`.${this.selectClasses.classSelectOption}`);
-            const _this = this;
-            selectInput.addEventListener("input", (function() {
-                selectOptionsItems.forEach((selectOptionsItem => {
-                    if (selectOptionsItem.textContent.toUpperCase().indexOf(selectInput.value.toUpperCase()) >= 0) selectOptionsItem.hidden = false; else selectOptionsItem.hidden = true;
-                }));
-                selectOptions.hidden === true ? _this.selectAction(selectItem) : null;
-            }));
-        }
-        selectCallback(selectItem, originalSelect) {
-            document.dispatchEvent(new CustomEvent("selectCallback", {
-                detail: {
-                    select: originalSelect
-                }
-            }));
-        }
-        setLogging(message) {
-            this.config.logging ? functions_FLS(`[select]: ${message}`) : null;
-        }
-    }
-    modules_flsModules.select = new SelectConstructor({});
     var PipsMode;
-    (function(PipsMode) {
+    (function (PipsMode) {
         PipsMode["Range"] = "range";
         PipsMode["Steps"] = "steps";
         PipsMode["Positions"] = "positions";
@@ -573,7 +68,7 @@
         PipsMode["Values"] = "values";
     })(PipsMode || (PipsMode = {}));
     var PipsType;
-    (function(PipsType) {
+    (function (PipsType) {
         PipsType[PipsType["None"] = -1] = "None";
         PipsType[PipsType["NoValue"] = 0] = "NoValue";
         PipsType[PipsType["LargeValue"] = 1] = "LargeValue";
@@ -595,7 +90,7 @@
         e.preventDefault();
     }
     function unique(array) {
-        return array.filter((function(a) {
+        return array.filter((function (a) {
             return !this[a] ? this[a] = true : false;
         }), {});
     }
@@ -616,7 +111,7 @@
     function addClassFor(element, className, duration) {
         if (duration > 0) {
             addClass(element, className);
-            setTimeout((function() {
+            setTimeout((function () {
                 removeClass(element, className);
             }), duration);
         }
@@ -625,7 +120,7 @@
         return Math.max(Math.min(a, 100), 0);
     }
     function asArray(a) {
-        return Array.isArray(a) ? a : [ a ];
+        return Array.isArray(a) ? a : [a];
     }
     function countDecimals(numStr) {
         numStr = String(numStr);
@@ -670,12 +165,12 @@
         var supportsPassive = false;
         try {
             var opts = Object.defineProperty({}, "passive", {
-                get: function() {
+                get: function () {
                     supportsPassive = true;
                 }
             });
             window.addEventListener("test", null, opts);
-        } catch (e) {}
+        } catch (e) { }
         return supportsPassive;
     }
     function getSupportsTouchActionNone() {
@@ -705,7 +200,7 @@
         var vb = xVal[j];
         var pa = xPct[j - 1];
         var pb = xPct[j];
-        return pa + toPercentage([ va, vb ], value) / subRangeRatio(pa, pb);
+        return pa + toPercentage([va, vb], value) / subRangeRatio(pa, pb);
     }
     function fromStepping(xVal, xPct, value) {
         if (value >= 100) return xVal.slice(-1)[0];
@@ -714,7 +209,7 @@
         var vb = xVal[j];
         var pa = xPct[j - 1];
         var pb = xPct[j];
-        return isPercentage([ va, vb ], (value - pa) * subRangeRatio(pa, pb));
+        return isPercentage([va, vb], (value - pa) * subRangeRatio(pa, pb));
     }
     function getStep(xPct, xSteps, snap, value) {
         if (value === 100) return value;
@@ -728,34 +223,34 @@
         if (!xSteps[j - 1]) return value;
         return xPct[j - 1] + closest(value - xPct[j - 1], xSteps[j - 1]);
     }
-    var Spectrum = function() {
+    var Spectrum = function () {
         function Spectrum(entry, snap, singleStep) {
             this.xPct = [];
             this.xVal = [];
             this.xSteps = [];
             this.xNumSteps = [];
             this.xHighestCompleteStep = [];
-            this.xSteps = [ singleStep || false ];
-            this.xNumSteps = [ false ];
+            this.xSteps = [singleStep || false];
+            this.xNumSteps = [false];
             this.snap = snap;
             var index;
             var ordered = [];
-            Object.keys(entry).forEach((function(index) {
-                ordered.push([ asArray(entry[index]), index ]);
+            Object.keys(entry).forEach((function (index) {
+                ordered.push([asArray(entry[index]), index]);
             }));
-            ordered.sort((function(a, b) {
+            ordered.sort((function (a, b) {
                 return a[0][0] - b[0][0];
             }));
             for (index = 0; index < ordered.length; index++) this.handleEntryPoint(ordered[index][1], ordered[index][0]);
             this.xNumSteps = this.xSteps.slice(0);
             for (index = 0; index < this.xNumSteps.length; index++) this.handleStepPoint(index, this.xNumSteps[index]);
         }
-        Spectrum.prototype.getDistance = function(value) {
+        Spectrum.prototype.getDistance = function (value) {
             var distances = [];
             for (var index = 0; index < this.xNumSteps.length - 1; index++) distances[index] = fromPercentage(this.xVal, value, index);
             return distances;
         };
-        Spectrum.prototype.getAbsoluteDistance = function(value, distances, direction) {
+        Spectrum.prototype.getAbsoluteDistance = function (value, distances, direction) {
             var xPct_index = 0;
             if (value < this.xPct[this.xPct.length - 1]) while (value > this.xPct[xPct_index + 1]) xPct_index++; else if (value === this.xPct[this.xPct.length - 1]) xPct_index = this.xPct.length - 2;
             if (!direction && value === this.xPct[xPct_index + 1]) xPct_index++;
@@ -789,23 +284,23 @@
             }
             return value + abs_distance_counter;
         };
-        Spectrum.prototype.toStepping = function(value) {
+        Spectrum.prototype.toStepping = function (value) {
             value = toStepping(this.xVal, this.xPct, value);
             return value;
         };
-        Spectrum.prototype.fromStepping = function(value) {
+        Spectrum.prototype.fromStepping = function (value) {
             return fromStepping(this.xVal, this.xPct, value);
         };
-        Spectrum.prototype.getStep = function(value) {
+        Spectrum.prototype.getStep = function (value) {
             value = getStep(this.xPct, this.xSteps, this.snap, value);
             return value;
         };
-        Spectrum.prototype.getDefaultStep = function(value, isDown, size) {
+        Spectrum.prototype.getDefaultStep = function (value, isDown, size) {
             var j = getJ(value, this.xPct);
             if (value === 100 || isDown && value === this.xPct[j - 1]) j = Math.max(j - 1, 1);
             return (this.xVal[j] - this.xVal[j - 1]) / size;
         };
-        Spectrum.prototype.getNearbySteps = function(value) {
+        Spectrum.prototype.getNearbySteps = function (value) {
             var j = getJ(value, this.xPct);
             return {
                 stepBefore: {
@@ -825,17 +320,17 @@
                 }
             };
         };
-        Spectrum.prototype.countStepDecimals = function() {
+        Spectrum.prototype.countStepDecimals = function () {
             var stepDecimals = this.xNumSteps.map(countDecimals);
             return Math.max.apply(null, stepDecimals);
         };
-        Spectrum.prototype.hasNoSize = function() {
+        Spectrum.prototype.hasNoSize = function () {
             return this.xVal[0] === this.xVal[this.xVal.length - 1];
         };
-        Spectrum.prototype.convert = function(value) {
+        Spectrum.prototype.convert = function (value) {
             return this.getStep(this.toStepping(value));
         };
-        Spectrum.prototype.handleEntryPoint = function(index, value) {
+        Spectrum.prototype.handleEntryPoint = function (index, value) {
             var percentage;
             if (index === "min") percentage = 0; else if (index === "max") percentage = 100; else percentage = parseFloat(index);
             if (!isNumeric(percentage) || !isNumeric(value[0])) throw new Error("noUiSlider: 'range' value isn't numeric.");
@@ -847,13 +342,13 @@
             } else this.xSteps.push(isNaN(value1) ? false : value1);
             this.xHighestCompleteStep.push(0);
         };
-        Spectrum.prototype.handleStepPoint = function(i, n) {
+        Spectrum.prototype.handleStepPoint = function (i, n) {
             if (!n) return;
             if (this.xVal[i] === this.xVal[i + 1]) {
                 this.xSteps[i] = this.xHighestCompleteStep[i] = this.xVal[i];
                 return;
             }
-            this.xSteps[i] = fromPercentage([ this.xVal[i], this.xVal[i + 1] ], n, 0) / subRangeRatio(this.xPct[i], this.xPct[i + 1]);
+            this.xSteps[i] = fromPercentage([this.xVal[i], this.xVal[i + 1]], n, 0) / subRangeRatio(this.xPct[i], this.xPct[i + 1]);
             var totalSteps = (this.xVal[i + 1] - this.xVal[i]) / this.xNumSteps[i];
             var highestStep = Math.ceil(Number(totalSteps.toFixed(3)) - 1);
             var step = this.xVal[i] + this.xNumSteps[i] * highestStep;
@@ -862,7 +357,7 @@
         return Spectrum;
     }();
     var defaultFormatter = {
-        to: function(value) {
+        to: function (value) {
             return value === void 0 ? "" : value.toFixed(2);
         },
         from: Number
@@ -949,9 +444,9 @@
         parsed.animationDuration = entry;
     }
     function testConnect(parsed, entry) {
-        var connect = [ false ];
+        var connect = [false];
         var i;
-        if (entry === "lower") entry = [ true, false ]; else if (entry === "upper") entry = [ false, true ];
+        if (entry === "lower") entry = [true, false]; else if (entry === "upper") entry = [false, true];
         if (entry === true || entry === false) {
             for (i = 1; i < parsed.handles; i++) connect.push(entry);
             connect.push(false);
@@ -960,16 +455,16 @@
     }
     function testOrientation(parsed, entry) {
         switch (entry) {
-          case "horizontal":
-            parsed.ort = 0;
-            break;
+            case "horizontal":
+                parsed.ort = 0;
+                break;
 
-          case "vertical":
-            parsed.ort = 1;
-            break;
+            case "vertical":
+                parsed.ort = 1;
+                break;
 
-          default:
-            throw new Error("noUiSlider: 'orientation' option is invalid.");
+            default:
+                throw new Error("noUiSlider: 'orientation' option is invalid.");
         }
     }
     function testMargin(parsed, entry) {
@@ -987,8 +482,8 @@
         if (!isNumeric(entry) && !Array.isArray(entry)) throw new Error("noUiSlider: 'padding' option must be numeric or array of exactly 2 numbers.");
         if (Array.isArray(entry) && !(entry.length === 2 || isNumeric(entry[0]) || isNumeric(entry[1]))) throw new Error("noUiSlider: 'padding' option must be numeric or array of exactly 2 numbers.");
         if (entry === 0) return;
-        if (!Array.isArray(entry)) entry = [ entry, entry ];
-        parsed.padding = [ parsed.spectrum.getDistance(entry[0]), parsed.spectrum.getDistance(entry[1]) ];
+        if (!Array.isArray(entry)) entry = [entry, entry];
+        parsed.padding = [parsed.spectrum.getDistance(entry[0]), parsed.spectrum.getDistance(entry[1])];
         for (index = 0; index < parsed.spectrum.xNumSteps.length - 1; index++) if (parsed.padding[0][index] < 0 || parsed.padding[1][index] < 0) throw new Error("noUiSlider: 'padding' option must be a positive number(s).");
         var totalPadding = entry[0] + entry[1];
         var firstValue = parsed.spectrum.xVal[0];
@@ -997,16 +492,16 @@
     }
     function testDirection(parsed, entry) {
         switch (entry) {
-          case "ltr":
-            parsed.dir = 0;
-            break;
+            case "ltr":
+                parsed.dir = 0;
+                break;
 
-          case "rtl":
-            parsed.dir = 1;
-            break;
+            case "rtl":
+                parsed.dir = 1;
+                break;
 
-          default:
-            throw new Error("noUiSlider: 'direction' option was not recognized.");
+            default:
+                throw new Error("noUiSlider: 'direction' option was not recognized.");
         }
     }
     function testBehaviour(parsed, entry) {
@@ -1043,7 +538,7 @@
         } else {
             entry = asArray(entry);
             if (entry.length !== parsed.handles) throw new Error("noUiSlider: must pass a formatter for all handles.");
-            entry.forEach((function(formatter) {
+            entry.forEach((function (formatter) {
                 if (typeof formatter !== "boolean" && !isValidPartialFormatter(formatter)) throw new Error("noUiSlider: 'tooltips' must be passed a formatter or 'false'.");
             }));
             parsed.tooltips = entry;
@@ -1076,7 +571,7 @@
         if (typeof entry !== "object") throw new Error("noUiSlider: 'cssClasses' must be an object.");
         if (typeof parsed.cssPrefix === "string") {
             parsed.cssClasses = {};
-            Object.keys(entry).forEach((function(key) {
+            Object.keys(entry).forEach((function (key) {
                 parsed.cssClasses[key] = parsed.cssPrefix + entry[key];
             }));
         } else parsed.cssClasses = entry;
@@ -1202,7 +697,7 @@
             keyboardDefaultStep: 10
         };
         if (options.format && !options.ariaFormat) options.ariaFormat = options.format;
-        Object.keys(tests).forEach((function(name) {
+        Object.keys(tests).forEach((function (name) {
             if (!isSet(options[name]) && defaults[name] === void 0) {
                 if (tests[name].r) throw new Error("noUiSlider: '" + name + "' is required.");
                 return;
@@ -1214,7 +709,7 @@
         var msPrefix = d.style.msTransform !== void 0;
         var noPrefix = d.style.transform !== void 0;
         parsed.transformRule = noPrefix ? "transform" : msPrefix ? "msTransform" : "webkitTransform";
-        var styles = [ [ "left", "top" ], [ "right", "bottom" ] ];
+        var styles = [["left", "top"], ["right", "bottom"]];
         parsed.style = styles[parsed.dir][parsed.ort];
         return parsed;
     }
@@ -1251,13 +746,13 @@
             handle.setAttribute("data-handle", String(handleNumber));
             if (options.keyboardSupport) {
                 handle.setAttribute("tabindex", "0");
-                handle.addEventListener("keydown", (function(event) {
+                handle.addEventListener("keydown", (function (event) {
                     return eventKeydown(event, handleNumber);
                 }));
             }
             if (options.handleAttributes !== void 0) {
                 var attributes_1 = options.handleAttributes[handleNumber];
-                Object.keys(attributes_1).forEach((function(attribute) {
+                Object.keys(attributes_1).forEach((function (attribute) {
                     handle.setAttribute(attribute, attributes_1[attribute]);
                 }));
             }
@@ -1307,7 +802,7 @@
                 scope_Handles[handleNumber].handle.removeAttribute("tabindex");
             } else {
                 scope_Target.setAttribute("disabled", "");
-                scope_Handles.forEach((function(handle) {
+                scope_Handles.forEach((function (handle) {
                     handle.handle.removeAttribute("tabindex");
                 }));
             }
@@ -1318,7 +813,7 @@
                 scope_Handles[handleNumber].handle.setAttribute("tabindex", "0");
             } else {
                 scope_Target.removeAttribute("disabled");
-                scope_Handles.forEach((function(handle) {
+                scope_Handles.forEach((function (handle) {
                     handle.removeAttribute("disabled");
                     handle.handle.setAttribute("tabindex", "0");
                 }));
@@ -1327,7 +822,7 @@
         function removeTooltips() {
             if (scope_Tooltips) {
                 removeEvent("update" + INTERNAL_EVENT_NS.tooltips);
-                scope_Tooltips.forEach((function(tooltip) {
+                scope_Tooltips.forEach((function (tooltip) {
                     if (tooltip) removeElement(tooltip);
                 }));
                 scope_Tooltips = null;
@@ -1336,7 +831,7 @@
         function tooltips() {
             removeTooltips();
             scope_Tooltips = scope_Handles.map(addTooltip);
-            bindEvent("update" + INTERNAL_EVENT_NS.tooltips, (function(values, handleNumber, unencoded) {
+            bindEvent("update" + INTERNAL_EVENT_NS.tooltips, (function (values, handleNumber, unencoded) {
                 if (!scope_Tooltips || !options.tooltips) return;
                 if (scope_Tooltips[handleNumber] === false) return;
                 var formattedValue = values[handleNumber];
@@ -1346,8 +841,8 @@
         }
         function aria() {
             removeEvent("update" + INTERNAL_EVENT_NS.aria);
-            bindEvent("update" + INTERNAL_EVENT_NS.aria, (function(values, handleNumber, unencoded, tap, positions) {
-                scope_HandleNumbers.forEach((function(index) {
+            bindEvent("update" + INTERNAL_EVENT_NS.aria, (function (values, handleNumber, unencoded, tap, positions) {
+                scope_HandleNumbers.forEach((function (index) {
                     var handle = scope_Handles[index];
                     var min = checkHandlePosition(scope_Locations, index, 0, true, true, true);
                     var max = checkHandlePosition(scope_Locations, index, 100, true, true, true);
@@ -1376,7 +871,7 @@
             }
             if (pips.mode === PipsMode.Positions) return mapToRange(pips.values, pips.stepped);
             if (pips.mode === PipsMode.Values) {
-                if (pips.stepped) return pips.values.map((function(value) {
+                if (pips.stepped) return pips.values.map((function (value) {
                     return scope_Spectrum.fromStepping(scope_Spectrum.getStep(scope_Spectrum.toStepping(value)));
                 }));
                 return pips.values;
@@ -1384,7 +879,7 @@
             return [];
         }
         function mapToRange(values, stepped) {
-            return values.map((function(value) {
+            return values.map((function (value) {
                 return scope_Spectrum.fromStepping(stepped ? scope_Spectrum.getStep(value) : value);
             }));
         }
@@ -1399,7 +894,7 @@
             var ignoreFirst = false;
             var ignoreLast = false;
             var prevPct = 0;
-            group = unique(group.slice().sort((function(a, b) {
+            group = unique(group.slice().sort((function (a, b) {
                 return a - b;
             })));
             if (group[0] !== firstInRange) {
@@ -1410,7 +905,7 @@
                 group.push(lastInRange);
                 ignoreLast = true;
             }
-            group.forEach((function(current, index) {
+            group.forEach((function (current, index) {
                 var step;
                 var i;
                 var q;
@@ -1436,11 +931,11 @@
                     stepSize = pctDifference / realSteps;
                     for (q = 1; q <= realSteps; q += 1) {
                         pctPos = prevPct + q * stepSize;
-                        indexes[pctPos.toFixed(5)] = [ scope_Spectrum.fromStepping(pctPos), 0 ];
+                        indexes[pctPos.toFixed(5)] = [scope_Spectrum.fromStepping(pctPos), 0];
                     }
                     type = group.indexOf(i) > -1 ? PipsType.LargeValue : isSteps ? PipsType.SmallValue : PipsType.NoValue;
                     if (!index && ignoreFirst && i !== high) type = 0;
-                    if (!(i === high && ignoreLast)) indexes[newPct.toFixed(5)] = [ i, type ];
+                    if (!(i === high && ignoreLast)) indexes[newPct.toFixed(5)] = [i, type];
                     prevPct = newPct;
                 }
             }));
@@ -1449,14 +944,14 @@
         function addMarking(spread, filterFunc, formatter) {
             var _a, _b;
             var element = scope_Document.createElement("div");
-            var valueSizeClasses = (_a = {}, _a[PipsType.None] = "", _a[PipsType.NoValue] = options.cssClasses.valueNormal, 
-            _a[PipsType.LargeValue] = options.cssClasses.valueLarge, _a[PipsType.SmallValue] = options.cssClasses.valueSub, 
-            _a);
-            var markerSizeClasses = (_b = {}, _b[PipsType.None] = "", _b[PipsType.NoValue] = options.cssClasses.markerNormal, 
-            _b[PipsType.LargeValue] = options.cssClasses.markerLarge, _b[PipsType.SmallValue] = options.cssClasses.markerSub, 
-            _b);
-            var valueOrientationClasses = [ options.cssClasses.valueHorizontal, options.cssClasses.valueVertical ];
-            var markerOrientationClasses = [ options.cssClasses.markerHorizontal, options.cssClasses.markerVertical ];
+            var valueSizeClasses = (_a = {}, _a[PipsType.None] = "", _a[PipsType.NoValue] = options.cssClasses.valueNormal,
+                _a[PipsType.LargeValue] = options.cssClasses.valueLarge, _a[PipsType.SmallValue] = options.cssClasses.valueSub,
+                _a);
+            var markerSizeClasses = (_b = {}, _b[PipsType.None] = "", _b[PipsType.NoValue] = options.cssClasses.markerNormal,
+                _b[PipsType.LargeValue] = options.cssClasses.markerLarge, _b[PipsType.SmallValue] = options.cssClasses.markerSub,
+                _b);
+            var valueOrientationClasses = [options.cssClasses.valueHorizontal, options.cssClasses.valueVertical];
+            var markerOrientationClasses = [options.cssClasses.markerHorizontal, options.cssClasses.markerVertical];
             addClass(element, options.cssClasses.pips);
             addClass(element, options.ort === 0 ? options.cssClasses.pipsHorizontal : options.cssClasses.pipsVertical);
             function getClasses(type, source) {
@@ -1479,7 +974,7 @@
                     node.innerHTML = String(formatter.to(value));
                 }
             }
-            Object.keys(spread).forEach((function(offset) {
+            Object.keys(spread).forEach((function (offset) {
                 addSpread(offset, spread[offset][0], spread[offset][1]);
             }));
             return element;
@@ -1495,7 +990,7 @@
             var spread = generateSpread(pips);
             var filter = pips.filter;
             var format = pips.format || {
-                to: function(value) {
+                to: function (value) {
                     return String(Math.round(value));
                 }
             };
@@ -1504,11 +999,11 @@
         }
         function baseSize() {
             var rect = scope_Base.getBoundingClientRect();
-            var alt = "offset" + [ "Width", "Height" ][options.ort];
+            var alt = "offset" + ["Width", "Height"][options.ort];
             return options.ort === 0 ? rect.width || scope_Base[alt] : rect.height || scope_Base[alt];
         }
         function attachEvent(events, element, callback, data) {
-            var method = function(event) {
+            var method = function (event) {
                 var e = fixEvent(event, data.pageOffset, data.target || element);
                 if (!e) return false;
                 if (isSliderDisabled() && !data.doNotReject) return false;
@@ -1521,11 +1016,11 @@
                 return;
             };
             var methods = [];
-            events.split(" ").forEach((function(eventName) {
+            events.split(" ").forEach((function (eventName) {
                 element.addEventListener(eventName, method, supportsPassive ? {
                     passive: true
                 } : false);
-                methods.push([ eventName, method ]);
+                methods.push([eventName, method]);
             }));
             return methods;
         }
@@ -1538,7 +1033,7 @@
             if (e.type.indexOf("MSPointer") === 0) pointer = true;
             if (e.type === "mousedown" && !e.buttons && !e.touches) return false;
             if (touch) {
-                var isTouchOnTarget = function(checkTouch) {
+                var isTouchOnTarget = function (checkTouch) {
                     var target = checkTouch.target;
                     return target === eventTarget || eventTarget.contains(target) || e.composed && e.composedPath().shift() === eventTarget;
                 };
@@ -1560,7 +1055,7 @@
                 y = e.clientY + pageOffset.y;
             }
             e.pageOffset = pageOffset;
-            e.points = [ x, y ];
+            e.points = [x, y];
             e.cursor = mouse || pointer;
             return e;
         }
@@ -1573,7 +1068,7 @@
         function getClosestHandle(clickedPosition) {
             var smallestDifference = 100;
             var handleNumber = false;
-            scope_Handles.forEach((function(handle, index) {
+            scope_Handles.forEach((function (handle, index) {
                 if (isHandleDisabled(index)) return;
                 var handlePosition = scope_Locations[index];
                 var differenceWithThisHandle = Math.abs(handlePosition - clickedPosition);
@@ -1601,7 +1096,7 @@
                 removeClass(data.handle, options.cssClasses.active);
                 scope_ActiveHandlesCount -= 1;
             }
-            data.listeners.forEach((function(c) {
+            data.listeners.forEach((function (c) {
                 scope_DocumentElement.removeEventListener(c[0], c[1]);
             }));
             if (scope_ActiveHandlesCount === 0) {
@@ -1613,14 +1108,14 @@
                 }
             }
             if (options.events.smoothSteps) {
-                data.handleNumbers.forEach((function(handleNumber) {
+                data.handleNumbers.forEach((function (handleNumber) {
                     setHandle(handleNumber, scope_Locations[handleNumber], true, true, false, false);
                 }));
-                data.handleNumbers.forEach((function(handleNumber) {
+                data.handleNumbers.forEach((function (handleNumber) {
                     fireEvent("update", handleNumber);
                 }));
             }
-            data.handleNumbers.forEach((function(handleNumber) {
+            data.handleNumbers.forEach((function (handleNumber) {
                 fireEvent("change", handleNumber);
                 fireEvent("set", handleNumber);
                 fireEvent("end", handleNumber);
@@ -1669,7 +1164,7 @@
                 if (scope_Handles.length > 1) addClass(scope_Target, options.cssClasses.drag);
                 scope_Body.addEventListener("selectstart", preventDefault, false);
             }
-            data.handleNumbers.forEach((function(handleNumber) {
+            data.handleNumbers.forEach((function (handleNumber) {
                 fireEvent("start", handleNumber);
             }));
         }
@@ -1687,25 +1182,25 @@
                 fireEvent("change", handleNumber, true);
                 fireEvent("set", handleNumber, true);
             } else eventStart(event, {
-                handleNumbers: [ handleNumber ]
+                handleNumbers: [handleNumber]
             });
         }
         function eventHover(event) {
             var proposal = calcPointToPercentage(event.calcPoint);
             var to = scope_Spectrum.getStep(proposal);
             var value = scope_Spectrum.fromStepping(to);
-            Object.keys(scope_Events).forEach((function(targetEvent) {
-                if ("hover" === targetEvent.split(".")[0]) scope_Events[targetEvent].forEach((function(callback) {
+            Object.keys(scope_Events).forEach((function (targetEvent) {
+                if ("hover" === targetEvent.split(".")[0]) scope_Events[targetEvent].forEach((function (callback) {
                     callback.call(scope_Self, value);
                 }));
             }));
         }
         function eventKeydown(event, handleNumber) {
             if (isSliderDisabled() || isHandleDisabled(handleNumber)) return false;
-            var horizontalKeys = [ "Left", "Right" ];
-            var verticalKeys = [ "Down", "Up" ];
-            var largeStepKeys = [ "PageDown", "PageUp" ];
-            var edgeKeys = [ "Home", "End" ];
+            var horizontalKeys = ["Left", "Right"];
+            var verticalKeys = ["Down", "Up"];
+            var largeStepKeys = ["PageDown", "PageUp"];
+            var edgeKeys = ["Home", "End"];
             if (options.dir && !options.ort) horizontalKeys.reverse(); else if (options.ort && !options.dir) {
                 verticalKeys.reverse();
                 largeStepKeys.reverse();
@@ -1739,22 +1234,22 @@
             return false;
         }
         function bindSliderEvents(behaviour) {
-            if (!behaviour.fixed) scope_Handles.forEach((function(handle, index) {
+            if (!behaviour.fixed) scope_Handles.forEach((function (handle, index) {
                 attachEvent(actions.start, handle.children[0], eventStart, {
-                    handleNumbers: [ index ]
+                    handleNumbers: [index]
                 });
             }));
             if (behaviour.tap) attachEvent(actions.start, scope_Base, eventTap, {});
             if (behaviour.hover) attachEvent(actions.move, scope_Base, eventHover, {
                 hover: true
             });
-            if (behaviour.drag) scope_Connects.forEach((function(connect, index) {
+            if (behaviour.drag) scope_Connects.forEach((function (connect, index) {
                 if (connect === false || index === 0 || index === scope_Connects.length - 1) return;
                 var handleBefore = scope_Handles[index - 1];
                 var handleAfter = scope_Handles[index];
-                var eventHolders = [ connect ];
-                var handlesToDrag = [ handleBefore, handleAfter ];
-                var handleNumbersToDrag = [ index - 1, index ];
+                var eventHolders = [connect];
+                var handlesToDrag = [handleBefore, handleAfter];
+                var handleNumbersToDrag = [index - 1, index];
                 addClass(connect, options.cssClasses.draggable);
                 if (behaviour.fixed) {
                     eventHolders.push(handleBefore.children[0]);
@@ -1764,7 +1259,7 @@
                     handlesToDrag = scope_Handles;
                     handleNumbersToDrag = scope_HandleNumbers;
                 }
-                eventHolders.forEach((function(eventHolder) {
+                eventHolders.forEach((function (eventHolder) {
                     attachEvent(actions.start, eventHolder, eventStart, {
                         handles: handlesToDrag,
                         handleNumbers: handleNumbersToDrag,
@@ -1776,7 +1271,7 @@
         function bindEvent(namespacedEvent, callback) {
             scope_Events[namespacedEvent] = scope_Events[namespacedEvent] || [];
             scope_Events[namespacedEvent].push(callback);
-            if (namespacedEvent.split(".")[0] === "update") scope_Handles.forEach((function(a, index) {
+            if (namespacedEvent.split(".")[0] === "update") scope_Handles.forEach((function (a, index) {
                 fireEvent("update", index);
             }));
         }
@@ -1786,16 +1281,16 @@
         function removeEvent(namespacedEvent) {
             var event = namespacedEvent && namespacedEvent.split(".")[0];
             var namespace = event ? namespacedEvent.substring(event.length) : namespacedEvent;
-            Object.keys(scope_Events).forEach((function(bind) {
+            Object.keys(scope_Events).forEach((function (bind) {
                 var tEvent = bind.split(".")[0];
                 var tNamespace = bind.substring(tEvent.length);
                 if ((!event || event === tEvent) && (!namespace || namespace === tNamespace)) if (!isInternalNamespace(tNamespace) || namespace === tNamespace) delete scope_Events[bind];
             }));
         }
         function fireEvent(eventName, handleNumber, tap) {
-            Object.keys(scope_Events).forEach((function(targetEvent) {
+            Object.keys(scope_Events).forEach((function (targetEvent) {
                 var eventType = targetEvent.split(".")[0];
-                if (eventName === eventType) scope_Events[targetEvent].forEach((function(callback) {
+                if (eventName === eventType) scope_Events[targetEvent].forEach((function (callback) {
                     callback.call(scope_Self, scope_Values.map(options.format.to), handleNumber, scope_Values.slice(), tap || false, scope_Locations.slice(), scope_Self);
                 }));
             }));
@@ -1845,23 +1340,23 @@
             var proposals = locations.slice();
             var firstHandle = handleNumbers[0];
             var smoothSteps = options.events.smoothSteps;
-            var b = [ !upward, upward ];
-            var f = [ upward, !upward ];
+            var b = [!upward, upward];
+            var f = [upward, !upward];
             handleNumbers = handleNumbers.slice();
             if (upward) handleNumbers.reverse();
-            if (handleNumbers.length > 1) handleNumbers.forEach((function(handleNumber, o) {
+            if (handleNumbers.length > 1) handleNumbers.forEach((function (handleNumber, o) {
                 var to = checkHandlePosition(proposals, handleNumber, proposals[handleNumber] + proposal, b[o], f[o], false, smoothSteps);
                 if (to === false) proposal = 0; else {
                     proposal = to - proposals[handleNumber];
                     proposals[handleNumber] = to;
                 }
-            })); else b = f = [ true ];
+            })); else b = f = [true];
             var state = false;
-            handleNumbers.forEach((function(handleNumber, o) {
+            handleNumbers.forEach((function (handleNumber, o) {
                 state = setHandle(handleNumber, locations[handleNumber] + proposal, b[o], f[o], false, smoothSteps) || state;
             }));
             if (state) {
-                handleNumbers.forEach((function(handleNumber) {
+                handleNumbers.forEach((function (handleNumber) {
                     fireEvent("update", handleNumber);
                     fireEvent("slide", handleNumber);
                 }));
@@ -1881,7 +1376,7 @@
             updateConnect(handleNumber + 1);
         }
         function setZindex() {
-            scope_HandleNumbers.forEach((function(handleNumber) {
+            scope_HandleNumbers.forEach((function (handleNumber) {
                 var dir = scope_Locations[handleNumber] > 50 ? -1 : 1;
                 var zIndex = 3 + (scope_Handles.length + dir * handleNumber);
                 scope_Handles[handleNumber].style.zIndex = String(zIndex);
@@ -1917,7 +1412,7 @@
             var isInit = scope_Locations[0] === void 0;
             fireSetEvent = fireSetEvent === void 0 ? true : fireSetEvent;
             if (options.animate && !isInit) addClassFor(scope_Target, options.cssClasses.tap, options.animationDuration);
-            scope_HandleNumbers.forEach((function(handleNumber) {
+            scope_HandleNumbers.forEach((function (handleNumber) {
                 setHandle(handleNumber, resolveToValue(values[handleNumber], handleNumber), true, false, exactInput);
             }));
             var i = scope_HandleNumbers.length === 1 ? 0 : 1;
@@ -1926,16 +1421,16 @@
                 scope_Locations[0] = 0;
                 if (scope_HandleNumbers.length > 1) {
                     var space_1 = 100 / (scope_HandleNumbers.length - 1);
-                    scope_HandleNumbers.forEach((function(handleNumber) {
+                    scope_HandleNumbers.forEach((function (handleNumber) {
                         scope_Locations[handleNumber] = handleNumber * space_1;
                     }));
                 }
             }
-            for (;i < scope_HandleNumbers.length; ++i) scope_HandleNumbers.forEach((function(handleNumber) {
+            for (; i < scope_HandleNumbers.length; ++i) scope_HandleNumbers.forEach((function (handleNumber) {
                 setHandle(handleNumber, scope_Locations[handleNumber], true, true, exactInput);
             }));
             setZindex();
-            scope_HandleNumbers.forEach((function(handleNumber) {
+            scope_HandleNumbers.forEach((function (handleNumber) {
                 fireEvent("update", handleNumber);
                 if (values[handleNumber] !== null && fireSetEvent) fireEvent("set", handleNumber);
             }));
@@ -1960,7 +1455,7 @@
         function destroy() {
             removeEvent(INTERNAL_EVENT_NS.aria);
             removeEvent(INTERNAL_EVENT_NS.tooltips);
-            Object.keys(options.cssClasses).forEach((function(key) {
+            Object.keys(options.cssClasses).forEach((function (key) {
                 removeClass(scope_Target, options.cssClasses[key]);
             }));
             while (scope_Target.firstChild) scope_Target.removeChild(scope_Target.firstChild);
@@ -1972,26 +1467,26 @@
             var value = scope_Values[handleNumber];
             var increment = nearbySteps.thisStep.step;
             var decrement = null;
-            if (options.snap) return [ value - nearbySteps.stepBefore.startValue || null, nearbySteps.stepAfter.startValue - value || null ];
+            if (options.snap) return [value - nearbySteps.stepBefore.startValue || null, nearbySteps.stepAfter.startValue - value || null];
             if (increment !== false) if (value + increment > nearbySteps.stepAfter.startValue) increment = nearbySteps.stepAfter.startValue - value;
             if (value > nearbySteps.thisStep.startValue) decrement = nearbySteps.thisStep.step; else if (nearbySteps.stepBefore.step === false) decrement = false; else decrement = value - nearbySteps.stepBefore.highestStep;
             if (location === 100) increment = null; else if (location === 0) decrement = null;
             var stepDecimals = scope_Spectrum.countStepDecimals();
             if (increment !== null && increment !== false) increment = Number(increment.toFixed(stepDecimals));
             if (decrement !== null && decrement !== false) decrement = Number(decrement.toFixed(stepDecimals));
-            return [ decrement, increment ];
+            return [decrement, increment];
         }
         function getNextSteps() {
             return scope_HandleNumbers.map(getNextStepsForHandle);
         }
         function updateOptions(optionsToUpdate, fireSetEvent) {
             var v = valueGet();
-            var updateAble = [ "margin", "limit", "padding", "range", "animate", "snap", "step", "format", "pips", "tooltips" ];
-            updateAble.forEach((function(name) {
+            var updateAble = ["margin", "limit", "padding", "range", "animate", "snap", "step", "format", "pips", "tooltips"];
+            updateAble.forEach((function (name) {
                 if (optionsToUpdate[name] !== void 0) originalOptions[name] = optionsToUpdate[name];
             }));
             var newOptions = testOptions(originalOptions);
-            updateAble.forEach((function(name) {
+            updateAble.forEach((function (name) {
                 if (optionsToUpdate[name] !== void 0) options[name] = newOptions[name];
             }));
             scope_Spectrum = newOptions.spectrum;
@@ -2024,7 +1519,7 @@
             reset: valueReset,
             disable,
             enable,
-            __moveHandles: function(upward, proposal, handleNumbers) {
+            __moveHandles: function (upward, proposal, handleNumbers) {
                 moveHandles(upward, proposal, scope_Locations, handleNumbers);
             },
             options: originalOptions,
@@ -2032,13 +1527,13 @@
             target: scope_Target,
             removePips,
             removeTooltips,
-            getPositions: function() {
+            getPositions: function () {
                 return scope_Locations.slice();
             },
-            getTooltips: function() {
+            getTooltips: function () {
                 return scope_Tooltips;
             },
-            getOrigins: function() {
+            getOrigins: function () {
                 return scope_Handles;
             },
             pips
@@ -2053,47 +1548,38 @@
         target.noUiSlider = api;
         return api;
     }
-    function rangeInit() {}
-    document.addEventListener("DOMContentLoaded", (function() {
+    function rangeInit() {
+        const settingSlidersWrapper = document.querySelectorAll(".item-setting");
+        settingSlidersWrapper.forEach((settingSliderWrapper => {
+            let settingSlider = settingSliderWrapper.querySelector(".item-setting__slider");
+            initialize(settingSlider, {
+                start: [20],
+                step: 5,
+                range: {
+                    min: [0],
+                    max: [100]
+                }
+            });
+            let settingSliderValue = settingSliderWrapper.querySelector(".item-setting__value span");
+            settingSlider.noUiSlider.on("update", (function (values, handle) {
+                console.log(typeof values[handle]);
+                settingSliderValue.innerHTML = Number(values[handle]).toFixed(0) + "%";
+            }));
+        }));
+    }
+    document.addEventListener("DOMContentLoaded", (function () {
         rangeInit();
     }));
     let addWindowScrollEvent = false;
     setTimeout((() => {
         if (addWindowScrollEvent) {
             let windowScroll = new Event("windowScroll");
-            window.addEventListener("scroll", (function(e) {
+            window.addEventListener("scroll", (function (e) {
                 document.dispatchEvent(windowScroll);
             }));
         }
     }), 0);
-    function getCookie(name, json = false) {
-        if (!name) return;
-        let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, "\\$1") + "=([^;]*)"));
-        if (matches) {
-            let res = decodeURIComponent(matches[1]);
-            if (json) try {
-                return JSON.parse(res);
-            } catch (e) {}
-            return res;
-        }
-        return;
-    }
-    function setCookie(name, value, options = {
-        path: "/"
-    }) {
-        if (!name) return;
-        options = options || {};
-        if (options.expires instanceof Date) options.expires = options.expires.toUTCString();
-        if (value instanceof Object) value = JSON.stringify(value);
-        let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-        for (let optionKey in options) {
-            updatedCookie += "; " + optionKey;
-            let optionValue = options[optionKey];
-            if (optionValue !== true) updatedCookie += "=" + optionValue;
-        }
-        document.cookie = updatedCookie;
-    }
-    window.onload = function() {
+    window.onload = function () {
         window.addEventListener("click", documentActions);
         function documentActions(e) {
             let targetElement = e.target;
@@ -2101,7 +1587,7 @@
                 let buttonReset = document.querySelector(".button-reset");
                 document.querySelectorAll(".item-setting .item-setting__slider");
                 let jugIndex = 0;
-                const values = [ 55, 10, 10, 10, 10, 5 ];
+                const values = [55, 10, 10, 10, 10, 5];
                 for (const jug in jugs) if (Object.prototype.hasOwnProperty.call(jugs, jug)) {
                     const elementJug = jugs[jug];
                     if (jugIndex < values.length) {
@@ -2185,7 +1671,6 @@
     let script_history = {};
     if (getCookie("jugs")) jugs = getCookie("jugs", true);
     if (getCookie("history")) script_history = getCookie("history", true);
-    console.log(script_history);
     function displayData() {
         let jugsItems = document.querySelector(".jugs__items");
         jugsItems.innerHTML = "";
@@ -2219,14 +1704,14 @@
             const settingSlider = settingSliderWrapper.querySelector(".item-setting__slider");
             const settingSliderValue = settingSliderWrapper.querySelector(".item-setting__value span");
             initialize(settingSlider, {
-                start: [ jugElement.percent ],
+                start: [jugElement.percent],
                 step: 1,
                 range: {
-                    min: [ 0 ],
-                    max: [ 100 ]
+                    min: [0],
+                    max: [100]
                 }
             });
-            settingSlider.noUiSlider.on("update", (function(values, handle) {
+            settingSlider.noUiSlider.on("update", (function (values, handle) {
                 settingSliderValue.innerHTML = `${Number(values[handle]).toFixed(0)}%`;
             }));
         }
@@ -2245,7 +1730,7 @@
             const jugElement = jugs[jug];
             const settingSliderWrapper = document.querySelector(`.item-setting-${jug}`);
             const settingSlider = settingSliderWrapper.querySelector(".item-setting__slider");
-            settingSlider.noUiSlider.set([ jugElement.percent ]);
+            settingSlider.noUiSlider.set([jugElement.percent]);
         }
         setCookie("jugs", jugs);
     }
@@ -2256,7 +1741,6 @@
         const fragment = document.createDocumentFragment();
         for (const date in script_history) if (Object.prototype.hasOwnProperty.call(script_history, date)) {
             const elements = script_history[date];
-            console.log(elements);
             let historyDataLabel;
             if (date === dataToday) historyDataLabel = "Сегодня"; else {
                 const [day, month] = date.split("/").map(Number);
@@ -2270,10 +1754,10 @@
                 historyDataLabel = formattedDate.toLocaleDateString("ru-RU", options);
             }
             const historyItems = elements.map((item => {
-                let isExpense = item.amount == "-";
+                let isExpense = item[0] == "-";
                 const className = isExpense ? "expense" : "income";
-                const formattedItem = isExpense ? item.amount : `+${item.amount}`;
-                return `<div class="item-history__element ${className}"><span>${item.jug}</span> ${formattedItem.split("").reverse().map(((el, index) => index % 3 !== 2 ? el : ` ${el}`)).reverse().join("")}</div>`;
+                const formattedItem = isExpense ? item : `+${item}`;
+                return `<div class="item-history__element ${className}">${formattedItem}</div>`;
             })).join("");
             const historyItemHTML = `\n                <div class="item-history__data">${historyDataLabel}</div>\n                <div class="item-history__body">\n                    ${historyItems}\n                </div>\n            `;
             const tempLi = document.createElement("li");
@@ -2284,15 +1768,8 @@
         historyList.innerHTML = "";
         historyList.appendChild(fragment);
     }
-    function addTransaction(date, amount, numberJugs) {
-        if (script_history.hasOwnProperty(date)) script_history[date].push({
-            amount,
-            jug: numberJugs
-        }); else script_history[date] = [ {
-            amount,
-            jug: numberJugs
-        } ];
-        console.log(script_history);
+    function addTransaction(date, amount) {
+        if (script_history.hasOwnProperty(date)) script_history[date].push(amount); else script_history[date] = [amount];
         setCookie("history", script_history);
         historyInit();
     }
@@ -2324,10 +1801,9 @@
                     userMessage("good", button);
                 }), 0);
                 amount += formInfo.moneyInput;
-                amount = amount.toFixed(2);
                 calculationJugs();
                 let data = new Date;
-                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput, formInfo.jugs);
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0); else if (formInfo.jugs) {
@@ -2337,7 +1813,7 @@
                 }), 0);
                 displayData();
                 let data = new Date;
-                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput, formInfo.jugs);
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0);
@@ -2364,7 +1840,4 @@
     window["FLS"] = true;
     isWebp();
     menuInit();
-    formFieldsInit({
-        viewPass: false
-    });
 })();

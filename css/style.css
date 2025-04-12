@@ -212,188 +212,6 @@ body {
   padding: 0 0.9375rem;
 }
 
-input[type=text],
-input[type=email],
-input[type=tel],
-textarea {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.input {
-  font-size: 0.875rem;
-  border: 0.125rem solid #000;
-  border-radius: 0.9375rem;
-  background: inherit;
-  width: 100%;
-  display: block;
-  padding: 8px 11px;
-}
-
-.input::-webkit-input-placeholder {
-  color: rgba(0, 0, 0, 0.42);
-}
-
-.input::-moz-placeholder {
-  color: rgba(0, 0, 0, 0.42);
-}
-
-.input:-ms-input-placeholder {
-  color: rgba(0, 0, 0, 0.42);
-}
-
-.input::-ms-input-placeholder {
-  color: rgba(0, 0, 0, 0.42);
-}
-
-.input::placeholder {
-  color: rgba(0, 0, 0, 0.42);
-}
-
-textarea.input {
-  resize: none;
-  padding: 0px 0px;
-}
-
-.select {
-  position: relative;
-}
-
-.select__body {
-  position: relative;
-}
-
-.select__title {
-  position: relative;
-  z-index: 1;
-  color: inherit;
-  text-align: left;
-  background-color: inherit;
-  cursor: pointer;
-  width: 100%;
-  border-radius: 4px;
-}
-
-.select__value {
-  font-size: 0.875rem;
-  color: rgb(0, 0, 0);
-  border: 0.125rem solid #000;
-  border-radius: 0.9375rem;
-  padding: 8px 11px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  height: 1.875rem;
-  gap: 0.625rem;
-}
-
-.select__value > * {
-  border-radius: 0.9375rem;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-}
-
-.select__value:after {
-  content: ">";
-  -ms-flex-item-align: stretch;
-      -ms-grid-row-align: stretch;
-      align-self: stretch;
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 10px;
-          flex: 0 0 10px;
-  -webkit-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-transform: rotate(90deg);
-      -ms-transform: rotate(90deg);
-          transform: rotate(90deg);
-}
-
-._select-open .select__value:after {
-  -webkit-transform: rotate(-90deg);
-      -ms-transform: rotate(-90deg);
-          transform: rotate(-90deg);
-}
-
-.select__value._select-pseudo-label::before {
-  content: attr(data-pseudo-label);
-  opacity: 0.5;
-}
-
-.select__text {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-}
-
-.select__input {
-  width: 100%;
-  background-color: transparent;
-  height: 100%;
-}
-
-.select__options {
-  color: #000;
-  position: absolute;
-  top: 18px;
-  border-radius: 0 0 4px 4px;
-  min-width: 100%;
-  left: 0;
-  background-color: #d5cccc;
-  border-top: 0;
-  border: 2px solid #000;
-  border-top: 0;
-  padding: 10px 0px 5px 0px;
-}
-
-.select__scroll {
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 200px;
-}
-
-.select__option {
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-  padding: 5px 15px;
-  color: inherit;
-}
-
-.select__option._select-selected {
-  background-color: #eee;
-}
-
-.select__row {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.select._select-open {
-  z-index: 5;
-}
-
-._select-tag {
-  cursor: pointer;
-}
-
 /* Functional styling;
  * These styles are required for noUiSlider to function.
  * You don't need to change these rules to apply your design.
@@ -826,31 +644,11 @@ textarea.input {
   color: #000;
 }
 
-.header__action {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  gap: 0.625rem;
-}
-
 .menu-open .setting {
   right: 0;
 }
 
-.money-open .money-entry {
-  right: 0;
-}
-
-.history-open .history-entry {
-  right: 0;
-}
-
-.setting,
-.money-entry,
-.history-entry {
+.setting {
   position: absolute;
   height: 100vh;
   overflow: auto;
@@ -861,116 +659,37 @@ textarea.input {
   top: 0;
   max-width: 478px;
   width: 100%;
-  padding: 0.625rem 1.25rem 0.625rem;
+  padding: 0.625rem 1.25rem 2.5rem;
   z-index: 4;
-  overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: hsl(0, 0%, 50%);
 }
 
-.setting__top,
-.money-entry__top,
-.history-entry__top {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  gap: 0.625rem;
-}
-
-.setting__top button,
-.money-entry__top button,
-.history-entry__top button {
-  width: 1.875rem;
-  height: 1.125rem;
-  position: relative;
-}
-
-.setting__top button::before,
-.setting__top button::after,
-.money-entry__top button::before,
-.money-entry__top button::after,
-.history-entry__top button::before,
-.history-entry__top button::after {
-  content: "";
-  -webkit-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  right: 0;
-  position: absolute;
-  width: 100%;
-  height: 0.125rem;
-  background-color: #000;
-}
-
-.setting__top button::before,
-.money-entry__top button::before,
-.history-entry__top button::before {
-  top: calc(50% - 0.0625rem);
-  -webkit-transform: rotate(-45deg);
-      -ms-transform: rotate(-45deg);
-          transform: rotate(-45deg);
-}
-
-.setting__top button::after,
-.money-entry__top button::after,
-.history-entry__top button::after {
-  bottom: calc(50% - 0.0625rem);
-  -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
-}
-
-.setting__title,
-.money-entry__title,
-.history-entry__title {
+.setting__title {
   font-weight: 400;
   color: #000;
 }
 
 @supports (font-size: clamp( 1.25rem , 1.0030864198rem  +  1.2345679012vw , 1.875rem )) {
-  .setting__title,
-  .money-entry__title,
-  .history-entry__title {
+  .setting__title {
     font-size: clamp( 1.25rem , 1.0030864198rem  +  1.2345679012vw , 1.875rem );
   }
 }
 
 @supports not (font-size: clamp( 1.25rem , 1.0030864198rem  +  1.2345679012vw , 1.875rem )) {
-  .setting__title,
-  .money-entry__title,
-  .history-entry__title {
+  .setting__title {
     font-size: calc(1.25rem + 0.625 * (100vw - 20rem) / 50.625);
   }
 }
 
-.setting__list,
-.money-entry__list,
-.history-entry__list {
+.setting__list {
   margin-top: 1.5625rem;
   max-width: 60.8%;
 }
 
-.setting__item:not(:last-child),
-.money-entry__item:not(:last-child),
-.history-entry__item:not(:last-child) {
+.setting__item:not(:last-child) {
   margin-bottom: 1.125rem;
 }
 
-.setting__counter,
-.money-entry__counter,
-.history-entry__counter {
-  margin-top: 0.9375rem;
-  font-size: 1rem;
-}
-
-.setting__button,
-.money-entry__button,
-.history-entry__button {
+.setting__button {
   margin-top: 1.25rem;
   max-width: 60.8%;
   width: 100%;
@@ -986,49 +705,37 @@ textarea.input {
   gap: 0.625rem;
 }
 
-.money-entry,
-.history-entry {
-  z-index: 6;
-}
-
-.item-setting__title,
-.item-money-entry__title {
+.item-setting__title {
   font-family: var(--font-family);
   font-weight: 400;
   color: #000;
 }
 
 @supports (font-size: clamp( 1rem , 0.7777777778rem  +  1.1111111111vw , 1.5625rem )) {
-  .item-setting__title,
-  .item-money-entry__title {
+  .item-setting__title {
     font-size: clamp( 1rem , 0.7777777778rem  +  1.1111111111vw , 1.5625rem );
   }
 }
 
 @supports not (font-size: clamp( 1rem , 0.7777777778rem  +  1.1111111111vw , 1.5625rem )) {
-  .item-setting__title,
-  .item-money-entry__title {
+  .item-setting__title {
     font-size: calc(1rem + 0.5625 * (100vw - 20rem) / 50.625);
   }
 }
 
-.item-setting__slider,
-.item-money-entry__slider {
+.item-setting__slider {
   margin-top: 0.6875rem;
 }
 
-.item-setting__slider.noUi-horizontal,
-.item-money-entry__slider.noUi-horizontal {
+.item-setting__slider.noUi-horizontal {
   height: 7px;
 }
 
-.item-setting__slider.noUi-target,
-.item-money-entry__slider.noUi-target {
+.item-setting__slider.noUi-target {
   background-color: #fff;
 }
 
-.item-setting__slider.noUi-horizontal .noUi-handle,
-.item-money-entry__slider.noUi-horizontal .noUi-handle {
+.item-setting__slider.noUi-horizontal .noUi-handle {
   width: 24px;
   height: 24px;
   border-radius: 100%;
@@ -1037,20 +744,16 @@ textarea.input {
   cursor: pointer;
 }
 
-.item-setting__slider.noUi-connect,
-.item-money-entry__slider.noUi-connect {
+.item-setting__slider.noUi-connect {
   background: rgba(255, 255, 255, 0.0117647059);
 }
 
-.item-setting__slider .noUi-connect,
-.item-money-entry__slider .noUi-connect {
+.item-setting__slider .noUi-connect {
   background: #000;
 }
 
 .item-setting__slider .noUi-handle:before,
-.item-setting__slider .noUi-handle:after,
-.item-money-entry__slider .noUi-handle:before,
-.item-money-entry__slider .noUi-handle:after {
+.item-setting__slider .noUi-handle:after {
   height: 16px;
   width: 16px;
   background: #000;
@@ -1059,26 +762,12 @@ textarea.input {
   border-radius: 100%;
 }
 
-.item-setting .select,
-.item-setting__input,
-.item-money-entry .select,
-.item-money-entry__input {
-  margin-top: 0.625rem;
-}
-
-.item-setting__button,
-.item-money-entry__button {
-  margin-top: 0.9375rem;
-}
-
-.item-setting__value,
-.item-money-entry__value {
+.item-setting__value {
   margin-top: 0.75rem;
   font-size: 0.8125rem;
 }
 
-.item-setting__value span,
-.item-money-entry__value span {
+.item-setting__value span {
   font-size: 1rem;
 }
 
@@ -1177,12 +866,6 @@ textarea.input {
   -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
           transform: rotate(45deg);
-}
-
-.icon-money svg,
-.icon-history svg {
-  width: 100%;
-  max-width: 2.16875rem;
 }
 
 .jugs {
@@ -1307,13 +990,13 @@ textarea.input {
 }
 
 .button.good {
-  -webkit-animation: animation-good 3s cubic-bezier(0, 0, 0, 0.98);
-          animation: animation-good 3s cubic-bezier(0, 0, 0, 0.98);
+  -webkit-animation: animation-good 8s ease;
+          animation: animation-good 8s ease;
 }
 
 .button.error {
-  -webkit-animation: animation-error 3s cubic-bezier(0, 0, 0, 0.98);
-          animation: animation-error 3s cubic-bezier(0, 0, 0, 0.98);
+  -webkit-animation: animation-error 8s ease;
+          animation: animation-error 8s ease;
 }
 
 @-webkit-keyframes animation-good {
@@ -1356,21 +1039,6 @@ textarea.input {
   }
 }
 
-.button-reset-money {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  gap: 0.625rem;
-  align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  width: 100%;
-}
-
 @media (max-width: 47.99875em) {
   .jugs__items {
     -ms-grid-columns: (1fr)[2];
@@ -1379,10 +1047,6 @@ textarea.input {
 }
 
 @media (any-hover: hover) {
-  .select__option:hover {
-    background: #d9d9d9;
-  }
-
   .button:hover {
     color: black;
     background: #fff;
