@@ -2185,6 +2185,7 @@
     let script_history = {};
     if (getCookie("jugs")) jugs = getCookie("jugs", true);
     if (getCookie("history")) script_history = getCookie("history", true);
+    console.log(script_history);
     function displayData() {
         let jugsItems = document.querySelector(".jugs__items");
         jugsItems.innerHTML = "";
@@ -2255,6 +2256,7 @@
         const fragment = document.createDocumentFragment();
         for (const date in script_history) if (Object.prototype.hasOwnProperty.call(script_history, date)) {
             const elements = script_history[date];
+            console.log(elements);
             let historyDataLabel;
             if (date === dataToday) historyDataLabel = "Сегодня"; else {
                 const [day, month] = date.split("/").map(Number);
@@ -2268,10 +2270,10 @@
                 historyDataLabel = formattedDate.toLocaleDateString("ru-RU", options);
             }
             const historyItems = elements.map((item => {
-                let isExpense = item[0] == "-";
+                let isExpense = item.amount == "-";
                 const className = isExpense ? "expense" : "income";
-                const formattedItem = isExpense ? item : `+${item}`;
-                return `<div class="item-history__element ${className}">${formattedItem}</div>`;
+                const formattedItem = isExpense ? item.amount : `+${item.amount}`;
+                return `<div class="item-history__element ${className}"><span>${item.jug}</span> ${formattedItem.split("").reverse().map(((el, index) => index % 3 !== 2 ? el : ` ${el}`)).reverse().join("")}</div>`;
             })).join("");
             const historyItemHTML = `\n                <div class="item-history__data">${historyDataLabel}</div>\n                <div class="item-history__body">\n                    ${historyItems}\n                </div>\n            `;
             const tempLi = document.createElement("li");
@@ -2282,8 +2284,15 @@
         historyList.innerHTML = "";
         historyList.appendChild(fragment);
     }
-    function addTransaction(date, amount) {
-        if (script_history.hasOwnProperty(date)) script_history[date].push(amount); else script_history[date] = [ amount ];
+    function addTransaction(date, amount, numberJugs) {
+        if (script_history.hasOwnProperty(date)) script_history[date].push({
+            amount,
+            jug: numberJugs
+        }); else script_history[date] = [ {
+            amount,
+            jug: numberJugs
+        } ];
+        console.log(script_history);
         setCookie("history", script_history);
         historyInit();
     }
@@ -2315,9 +2324,10 @@
                     userMessage("good", button);
                 }), 0);
                 amount += formInfo.moneyInput;
+                amount = amount.toFixed(2);
                 calculationJugs();
                 let data = new Date;
-                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput);
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput, formInfo.jugs);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0); else if (formInfo.jugs) {
@@ -2327,7 +2337,7 @@
                 }), 0);
                 displayData();
                 let data = new Date;
-                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput);
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, formInfo.moneyInput, formInfo.jugs);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0);
