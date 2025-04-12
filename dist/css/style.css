@@ -1108,6 +1108,13 @@ textarea.input {
 }
 
 .item-history__element {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 10px;
   margin-top: 0.3125rem;
   font-size: 1.125rem;
 }

@@ -23,7 +23,7 @@ function getCookie(name, json = false) {
     if (json) {
       try {
         return JSON.parse(res);
-      } catch (e) {}
+      } catch (e) { }
     }
     return res;
   }
@@ -219,6 +219,7 @@ if (getCookie("jugs")) {
 if (getCookie("history")) {
   history = getCookie("history", true);
 }
+console.log(history);
 
 // Отображение данных на экране
 function displayData() {
@@ -373,6 +374,8 @@ function historyInit() {
     // Проверяем, что свойство принадлежит самому объекту history
     if (Object.prototype.hasOwnProperty.call(history, date)) {
       const elements = history[date]; // Элементы для данной даты
+      console.log(elements);
+
       let historyDataLabel;
 
       // Сравниваем дату с сегодняшней
@@ -394,10 +397,10 @@ function historyInit() {
       const historyItems = elements
         .map((item) => {
           // Определяем тип элемента (доход или расход)
-          let isExpense = item[0] == "-";
+          let isExpense = item.amount == "-";
           const className = isExpense ? "expense" : "income";
-          const formattedItem = isExpense ? item : `+${item}`;
-          return `<div class="item-history__element ${className}">${formattedItem}</div>`;
+          const formattedItem = isExpense ? item.amount : `+${item.amount}`;
+          return `<div class="item-history__element ${className}"><span>${item.jug}</span> ${formattedItem.split('').reverse().map((el, index) => index % 3 !== 2 ? el : ` ${el}`).reverse().join('')}</div>`;
         })
         .join(""); // Объединяем элементы в строку
 
@@ -423,16 +426,18 @@ function historyInit() {
 }
 
 // добовление операции в историю
-function addTransaction(date, amount) {
+function addTransaction(date, amount, numberJugs) {
   // Проверка, существует ли дата в объекте
   if (history.hasOwnProperty(date)) {
     // Если существует, добавляем операцию в существующий массив
-    history[date].push(amount);
+    history[date].push({ 'amount': amount, jug: numberJugs });
   } else {
     // Если не существует, создаем новый массив с новой операцией
-    history[date] = [amount];
+    history[date] = [{ 'amount': amount, jug: numberJugs }]
   }
-
+  // Добавления в какой куши нидут начисления
+  // history.jug = numberJugs;
+  console.log(history);
   setCookie("history", history);
   historyInit();
 }
@@ -479,13 +484,15 @@ function dataProcessing(formInfo, button) {
           userMessage("good", button);
         }, 0);
         amount += formInfo.moneyInput;
+        amount = amount.toFixed(2);
         calculationJugs();
 
         // Добавление истории в объект
         let data = new Date();
         addTransaction(
           `${data.getDate()}/${data.getMonth() + 1}`,
-          formInfo.moneyInput
+          formInfo.moneyInput,
+          formInfo.jugs
         );
       } else {
         setTimeout(() => {
@@ -503,7 +510,8 @@ function dataProcessing(formInfo, button) {
       let data = new Date();
       addTransaction(
         `${data.getDate()}/${data.getMonth() + 1}`,
-        formInfo.moneyInput
+        formInfo.moneyInput,
+        formInfo.jugs
       );
     } else {
       setTimeout(() => {
