@@ -212,6 +212,17 @@ let jugs = {
   },
 };
 let history = {};
+let localization = {
+  "monthly": "Ежемесячные траты",
+  "entertainment": "Развлечения",
+  "saving": "Накопления",
+  "development": "Саморазвитие",
+  "safety": "Подушка безопасности",
+  "present": "Подарки",
+  "undefined": "Не указано",
+  "unspecified": "Не указано",
+
+}
 
 if (getCookie("jugs")) {
   jugs = getCookie("jugs", true);
@@ -396,11 +407,13 @@ function historyInit() {
       // Создаем HTML для элементов истории для данной даты
       const historyItems = elements
         .map((item) => {
+          console.log(item.amount[0]);
+
           // Определяем тип элемента (доход или расход)
-          let isExpense = item.amount == "-";
+          let isExpense = item.amount[0] == "-";
           const className = isExpense ? "expense" : "income";
           const formattedItem = isExpense ? item.amount : `+${item.amount}`;
-          return `<div class="item-history__element ${className}"><span>${item.jug}</span> ${formattedItem.split('').reverse().map((el, index) => index % 3 !== 2 ? el : ` ${el}`).reverse().join('')}</div>`;
+          return `<div class="item-history__element ${className}"><span>${localization[item.jug]}</span> ${formattedItem.split('').reverse().map((el, index) => index % 3 !== 2 ? el : ` ${el}`).reverse().join('')}</div>`;
         })
         .join(""); // Объединяем элементы в строку
 
@@ -535,7 +548,8 @@ function dataProcessing(formInfo, button) {
       let data = new Date();
       addTransaction(
         `${data.getDate()}/${data.getMonth() + 1}`,
-        `-${formInfo.moneyOutput}`
+        `-${formInfo.moneyOutput}`,
+        formInfo.jugs
       );
     } else {
       setTimeout(() => {

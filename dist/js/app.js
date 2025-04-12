@@ -2183,6 +2183,16 @@
         }
     };
     let script_history = {};
+    let localization = {
+        monthly: "Ежемесячные траты",
+        entertainment: "Развлечения",
+        saving: "Накопления",
+        development: "Саморазвитие",
+        safety: "Подушка безопасности",
+        present: "Подарки",
+        undefined: "Не указано",
+        unspecified: "Не указано"
+    };
     if (getCookie("jugs")) jugs = getCookie("jugs", true);
     if (getCookie("history")) script_history = getCookie("history", true);
     console.log(script_history);
@@ -2270,10 +2280,11 @@
                 historyDataLabel = formattedDate.toLocaleDateString("ru-RU", options);
             }
             const historyItems = elements.map((item => {
-                let isExpense = item.amount == "-";
+                console.log(item.amount[0]);
+                let isExpense = item.amount[0] == "-";
                 const className = isExpense ? "expense" : "income";
                 const formattedItem = isExpense ? item.amount : `+${item.amount}`;
-                return `<div class="item-history__element ${className}"><span>${item.jug}</span> ${formattedItem.split("").reverse().map(((el, index) => index % 3 !== 2 ? el : ` ${el}`)).reverse().join("")}</div>`;
+                return `<div class="item-history__element ${className}"><span>${localization[item.jug]}</span> ${formattedItem.split("").reverse().map(((el, index) => index % 3 !== 2 ? el : ` ${el}`)).reverse().join("")}</div>`;
             })).join("");
             const historyItemHTML = `\n                <div class="item-history__data">${historyDataLabel}</div>\n                <div class="item-history__body">\n                    ${historyItems}\n                </div>\n            `;
             const tempLi = document.createElement("li");
@@ -2351,7 +2362,7 @@
                 }), 0);
                 displayData();
                 let data = new Date;
-                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, `-${formInfo.moneyOutput}`);
+                addTransaction(`${data.getDate()}/${data.getMonth() + 1}`, `-${formInfo.moneyOutput}`, formInfo.jugs);
             } else setTimeout((() => {
                 userMessage("error", button);
             }), 0);
