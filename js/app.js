@@ -2357,6 +2357,7 @@
             formInfo.moneyOutput = Number(formInfo.moneyOutput);
             if (jugs[formInfo.jugs].money >= formInfo.moneyOutput) {
                 jugs[formInfo.jugs].money -= formInfo.moneyOutput;
+                jugs[formInfo.jugs].money = toFixed(2);
                 setTimeout((() => {
                     userMessage("good", button);
                 }), 0);
